@@ -6,20 +6,20 @@
     <groupId>pe.edu.utp.eventope</groupId>
     <artifactId>EventoPe</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <!-- CORREGIDO: Cambiado de 'jar' a 'war' para aplicaciones web dynamic -->
+    
     <packaging>war</packaging>
 
     <name>EventoPe - Proyecto Base</name>
     <description>Proyecto Maven optimizado para Jakarta EE 10, Hibernate y MySQL</description>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Jakarta EE 10 API (Provee @Entity, @Id, @Column, etc.) -->
+        <!-- Jakarta EE 10 API  -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
