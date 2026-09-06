@@ -1,0 +1,1876 @@
+=== CLASE: AdministradorPlataforma.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "administrador_plataforma")
+public class AdministradorPlataforma implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String username;
+
+    @Column(name = "nivel_acceso")
+    private String nivelAcceso;
+
+    @Column(name = "area_soporte")
+    private String areaSoporte;
+
+    public AdministradorPlataforma() {
+    }
+
+    public AdministradorPlataforma(int id, String username, String nivelAcceso, String areaSoporte) {
+        this.id = id;
+        this.username = username;
+        this.nivelAcceso = nivelAcceso;
+        this.areaSoporte = areaSoporte;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNivelAcceso() {
+        return nivelAcceso;
+    }
+
+    public void setNivelAcceso(String nivelAcceso) {
+        this.nivelAcceso = nivelAcceso;
+    }
+
+    public String getAreaSoporte() {
+        return areaSoporte;
+    }
+
+    public void setAreaSoporte(String areaSoporte) {
+        this.areaSoporte = areaSoporte;
+    }
+}
+
+
+=== CLASE: Artista.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "artista")
+public class Artista implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "nombre_artistico")
+    private String nombreArtistico;
+
+    @Column(name = "genero_musical")
+    private String generoMusical;
+
+    public Artista() {
+    }
+
+    public Artista(int id, String nombreArtistico, String generoMusical) {
+        this.id = id;
+        this.nombreArtistico = nombreArtistico;
+        this.generoMusical = generoMusical;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombreArtistico() {
+        return nombreArtistico;
+    }
+
+    public void setNombreArtistico(String nombreArtistico) {
+        this.nombreArtistico = nombreArtistico;
+    }
+
+    public String getGeneroMusical() {
+        return generoMusical;
+    }
+
+    public void setGeneroMusical(String generoMusical) {
+        this.generoMusical = generoMusical;
+    }
+}
+
+
+=== CLASE: BoletoNominado.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "boleto_nominado")
+public class BoletoNominado implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "entrada_id")
+    private int entradaId;
+
+    @Column(name = "dni_asistente")
+    private String dniAsistente;
+
+    @Column(name = "nombres_asistente")
+    private String nombresAsistente;
+
+    @Column(name = "apellidos_asistente")
+    private String apellidosAsistente;
+
+    public BoletoNominado() {
+    }
+
+    public BoletoNominado(int id, int entradaId, String dniAsistente, String nombresAsistente, String apellidosAsistente) {
+        this.id = id;
+        this.entradaId = entradaId;
+        this.dniAsistente = dniAsistente;
+        this.nombresAsistente = nombresAsistente;
+        this.apellidosAsistente = apellidosAsistente;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getEntradaId() {
+        return entradaId;
+    }
+
+    public void setEntradaId(int entradaId) {
+        this.entradaId = entradaId;
+    }
+
+    public String getDniAsistente() {
+        return dniAsistente;
+    }
+
+    public void setDniAsistente(String dniAsistente) {
+        this.dniAsistente = dniAsistente;
+    }
+
+    public String getNombresAsistente() {
+        return nombresAsistente;
+    }
+
+    public void setNombresAsistente(String nombresAsistente) {
+        this.nombresAsistente = nombresAsistente;
+    }
+
+    public String getApellidosAsistente() {
+        return apellidosAsistente;
+    }
+
+    public void setApellidosAsistente(String apellidosAsistente) {
+        this.apellidosAsistente = apellidosAsistente;
+    }
+}
+
+
+=== CLASE: CategoriaAsiento.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "categoria_asiento")
+public class CategoriaAsiento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String nombre;
+
+    private BigDecimal precio;
+
+    public CategoriaAsiento() {
+    }
+
+    public CategoriaAsiento(int id, String nombre, BigDecimal precio) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precio;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+}
+
+
+=== CLASE: ComprobantePago.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "comprobante_pago")
+public class ComprobantePago implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private LocalDateTime fecha;
+
+    private BigDecimal monto;
+
+    @Column(name = "metodo_pago_id")
+    private int metodoPagoId;
+
+    private String estado;
+
+    public ComprobantePago() {
+    }
+
+    public ComprobantePago(int id, LocalDateTime fecha, BigDecimal monto, int metodoPagoId, String estado) {
+        this.id = id;
+        this.fecha = fecha;
+        this.monto = monto;
+        this.metodoPagoId = metodoPagoId;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public BigDecimal getMonto() {
+        return monto;
+    }
+
+    public void setMonto(BigDecimal monto) {
+        this.monto = monto;
+    }
+
+    public int getMetodoPagoId() {
+        return metodoPagoId;
+    }
+
+    public void setMetodoPagoId(int metodoPagoId) {
+        this.metodoPagoId = metodoPagoId;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
+
+
+=== CLASE: ControlAccesoPuerta.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "control_acceso_puerta")
+public class ControlAccesoPuerta implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "nombre_puerta")
+    private String nombrePuerta;
+
+    private String ubicacion;
+
+    public ControlAccesoPuerta() {
+    }
+
+    public ControlAccesoPuerta(int id, String nombrePuerta, String ubicacion) {
+        this.id = id;
+        this.nombrePuerta = nombrePuerta;
+        this.ubicacion = ubicacion;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombrePuerta() {
+        return nombrePuerta;
+    }
+
+    public void setNombrePuerta(String nombrePuerta) {
+        this.nombrePuerta = nombrePuerta;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+}
+
+
+=== CLASE: CuponDescuento.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "cupon_descuento")
+public class CuponDescuento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String codigo;
+
+    private BigDecimal porcentaje;
+
+    @Column(name = "fecha_expiracion")
+    private LocalDate fechaExpiracion;
+
+    private boolean activo;
+
+    public CuponDescuento() {
+    }
+
+    public CuponDescuento(int id, String codigo, BigDecimal porcentaje, LocalDate fechaExpiracion, boolean activo) {
+        this.id = id;
+        this.codigo = codigo;
+        this.porcentaje = porcentaje;
+        this.fechaExpiracion = fechaExpiracion;
+        this.activo = activo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public BigDecimal getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(BigDecimal porcentaje) {
+        this.porcentaje = porcentaje;
+    }
+
+    public LocalDate getFechaExpiracion() {
+        return fechaExpiracion;
+    }
+
+    public void setFechaExpiracion(LocalDate fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+}
+
+
+=== CLASE: DetalleTransaccion.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "detalle_transaccion")
+public class DetalleTransaccion implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "transaccion_id")
+    private int transaccionId;
+
+    @Column(name = "entrada_id")
+    private int entradaId;
+
+    private int cantidad;
+
+    @Column(name = "precio_unitario")
+    private BigDecimal precioUnitario;
+
+    private BigDecimal subtotal;
+
+    public DetalleTransaccion() {
+    }
+
+    public DetalleTransaccion(int id, int transaccionId, int entradaId, int cantidad, BigDecimal precioUnitario, BigDecimal subtotal) {
+        this.id = id;
+        this.transaccionId = transaccionId;
+        this.entradaId = entradaId;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+        this.subtotal = subtotal;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTransaccionId() {
+        return transaccionId;
+    }
+
+    public void setTransaccionId(int transaccionId) {
+        this.transaccionId = transaccionId;
+    }
+
+    public int getEntradaId() {
+        return entradaId;
+    }
+
+    public void setEntradaId(int entradaId) {
+        this.entradaId = entradaId;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+}
+
+
+=== CLASE: DispositivoValidacion.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "dispositivo_validacion")
+public class DispositivoValidacion implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "codigo_dispositivo")
+    private String codigoDispositivo;
+
+    private String estado;
+
+    public DispositivoValidacion() {
+    }
+
+    public DispositivoValidacion(int id, String codigoDispositivo, String estado) {
+        this.id = id;
+        this.codigoDispositivo = codigoDispositivo;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCodigoDispositivo() {
+        return codigoDispositivo;
+    }
+
+    public void setCodigoDispositivo(String codigoDispositivo) {
+        this.codigoDispositivo = codigoDispositivo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
+
+
+=== CLASE: EntradaDigital.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "entrada_digital")
+public class EntradaDigital implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "codigo_entrada")
+    private String codigoEntrada;
+
+    @Column(name = "evento_id")
+    private int eventoId;
+
+    @Column(name = "comprador_id")
+    private int compradorId;
+
+    @Column(name = "estado_uso")
+    private String estadoUso;
+
+    public EntradaDigital() {
+    }
+
+    public EntradaDigital(int id, String codigoEntrada, int eventoId, int compradorId, String estadoUso) {
+        this.id = id;
+        this.codigoEntrada = codigoEntrada;
+        this.eventoId = eventoId;
+        this.compradorId = compradorId;
+        this.estadoUso = estadoUso;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getCodigoEntrada() {
+        return codigoEntrada;
+    }
+
+    public void setCodigoEntrada(String codigoEntrada) {
+        this.codigoEntrada = codigoEntrada;
+    }
+
+    public int getEventoId() {
+        return eventoId;
+    }
+
+    public void setEventoId(int eventoId) {
+        this.eventoId = eventoId;
+    }
+
+    public int getCompradorId() {
+        return compradorId;
+    }
+
+    public void setCompradorId(int compradorId) {
+        this.compradorId = compradorId;
+    }
+
+    public String getEstadoUso() {
+        return estadoUso;
+    }
+
+    public void setEstadoUso(String estadoUso) {
+        this.estadoUso = estadoUso;
+    }
+}
+
+
+=== CLASE: EventoCultural.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "evento_cultural")
+public class EventoCultural implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String titulo;
+
+    private String descripcion;
+
+    private LocalDateTime fecha;
+
+    @Column(name = "local_id")
+    private int localId;
+
+    @Column(name = "organizador_id")
+    private int organizadorId;
+
+    public EventoCultural() {
+    }
+
+    public EventoCultural(int id, String titulo, String descripcion, LocalDateTime fecha, int localId, int organizadorId) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.localId = localId;
+        this.organizadorId = organizadorId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(int localId) {
+        this.localId = localId;
+    }
+
+    public int getOrganizadorId() {
+        return organizadorId;
+    }
+
+    public void setOrganizadorId(int organizadorId) {
+        this.organizadorId = organizadorId;
+    }
+}
+
+
+=== CLASE: HistorialCompra.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "historial_compra")
+public class HistorialCompra implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "cliente_id")
+    private int clienteId;
+
+    @Column(name = "total_boletos_comprados")
+    private int totalBoletosComprados;
+
+    @Column(name = "ultima_compra_fecha")
+    private LocalDateTime ultimaCompraFecha;
+
+    public HistorialCompra() {
+    }
+
+    public HistorialCompra(int id, int clienteId, int totalBoletosComprados, LocalDateTime ultimaCompraFecha) {
+        this.id = id;
+        this.clienteId = clienteId;
+        this.totalBoletosComprados = totalBoletosComprados;
+        this.ultimaCompraFecha = ultimaCompraFecha;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public int getTotalBoletosComprados() {
+        return totalBoletosComprados;
+    }
+
+    public void setTotalBoletosComprados(int totalBoletosComprados) {
+        this.totalBoletosComprados = totalBoletosComprados;
+    }
+
+    public LocalDateTime getUltimaCompraFecha() {
+        return ultimaCompraFecha;
+    }
+
+    public void setUltimaCompraFecha(LocalDateTime ultimaCompraFecha) {
+        this.ultimaCompraFecha = ultimaCompraFecha;
+    }
+}
+
+
+=== CLASE: HistorialRotacionQR.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "historial_rotacion_qr")
+public class HistorialRotacionQR implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "qr_id")
+    private int qrId;
+
+    @Column(name = "hora_generacion")
+    private LocalDateTime horaGeneracion;
+
+    @Column(name = "hash_anterior")
+    private String hashAnterior;
+
+    @Column(name = "hash_nuevo")
+    private String hashNuevo;
+
+    public HistorialRotacionQR() {
+    }
+
+    public HistorialRotacionQR(int id, int qrId, LocalDateTime horaGeneracion, String hashAnterior, String hashNuevo) {
+        this.id = id;
+        this.qrId = qrId;
+        this.horaGeneracion = horaGeneracion;
+        this.hashAnterior = hashAnterior;
+        this.hashNuevo = hashNuevo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getQrId() {
+        return qrId;
+    }
+
+    public void setQrId(int qrId) {
+        this.qrId = qrId;
+    }
+
+    public LocalDateTime getHoraGeneracion() {
+        return horaGeneracion;
+    }
+
+    public void setHoraGeneracion(LocalDateTime horaGeneracion) {
+        this.horaGeneracion = horaGeneracion;
+    }
+
+    public String getHashAnterior() {
+        return hashAnterior;
+    }
+
+    public void setHashAnterior(String hashAnterior) {
+        this.hashAnterior = hashAnterior;
+    }
+
+    public String getHashNuevo() {
+        return hashNuevo;
+    }
+
+    public void setHashNuevo(String hashNuevo) {
+        this.hashNuevo = hashNuevo;
+    }
+}
+
+
+=== CLASE: IncidenciaAcceso.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "incidencia_acceso")
+public class IncidenciaAcceso implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String descripcion;
+
+    @Column(name = "fecha_hora")
+    private LocalDateTime fechaHora;
+
+    public IncidenciaAcceso() {
+    }
+
+    public IncidenciaAcceso(int id, String descripcion, LocalDateTime fechaHora) {
+        this.id = id;
+        this.descripcion = descripcion;
+        this.fechaHora = fechaHora;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+}
+
+
+=== CLASE: LocalConcierto.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "local_concierto")
+public class LocalConcierto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String nombre;
+
+    private String direccion;
+
+    private int capacidad;
+
+    public LocalConcierto() {
+    }
+
+    public LocalConcierto(int id, String nombre, String direccion, int capacidad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.capacidad = capacidad;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public int getCapacidad() {
+        return capacidad;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+}
+
+
+=== CLASE: MetodoPago.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "metodo_pago")
+public class MetodoPago implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String tipo;
+
+    private String referencia;
+
+    private boolean confirmado;
+
+    public MetodoPago() {
+    }
+
+    public MetodoPago(int id, String tipo, String referencia, boolean confirmado) {
+        this.id = id;
+        this.tipo = tipo;
+        this.referencia = referencia;
+        this.confirmado = confirmado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
+
+    public boolean isConfirmado() {
+        return confirmado;
+    }
+
+    public void setConfirmado(boolean confirmado) {
+        this.confirmado = confirmado;
+    }
+}
+
+
+=== CLASE: NotificacionUsuario.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "notificacion_usuario")
+public class NotificacionUsuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "usuario_id")
+    private int usuarioId;
+
+    private String mensaje;
+
+    @Column(name = "fecha_envio")
+    private LocalDateTime fechaEnvio;
+
+    private boolean leido;
+
+    public NotificacionUsuario() {
+    }
+
+    public NotificacionUsuario(int id, int usuarioId, String mensaje, LocalDateTime fechaEnvio, boolean leido) {
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.mensaje = mensaje;
+        this.fechaEnvio = fechaEnvio;
+        this.leido = leido;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public LocalDateTime getFechaEnvio() {
+        return fechaEnvio;
+    }
+
+    public void setFechaEnvio(LocalDateTime fechaEnvio) {
+        this.fechaEnvio = fechaEnvio;
+    }
+
+    public boolean isLeido() {
+        return leido;
+    }
+
+    public void setLeido(boolean leido) {
+        this.leido = leido;
+    }
+}
+
+
+=== CLASE: OrganizadorEvento.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "organizador_evento")
+public class OrganizadorEvento implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "nombre_empresa")
+    private String nombreEmpresa;
+
+    private String contacto;
+
+    public OrganizadorEvento() {
+    }
+
+    public OrganizadorEvento(int id, String nombreEmpresa, String contacto) {
+        this.id = id;
+        this.nombreEmpresa = nombreEmpresa;
+        this.contacto = contacto;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
+
+    public void setNombreEmpresa(String nombreEmpresa) {
+        this.nombreEmpresa = nombreEmpresa;
+    }
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+}
+
+
+=== CLASE: PerfilUsuario.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "perfil_usuario")
+public class PerfilUsuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "cliente_id")
+    private int clienteId;
+
+    @Column(name = "fecha_registro")
+    private LocalDateTime fechaRegistro;
+
+    @Column(name = "estado_verificacion")
+    private String estadoVerificacion;
+
+    private String pais;
+
+    @Column(name = "fecha_nacimiento")
+    private LocalDate fechaNacimiento;
+
+    public PerfilUsuario() {
+    }
+
+    public PerfilUsuario(int id, int clienteId, LocalDateTime fechaRegistro, String estadoVerificacion, String pais, LocalDate fechaNacimiento) {
+        this.id = id;
+        this.clienteId = clienteId;
+        this.fechaRegistro = fechaRegistro;
+        this.estadoVerificacion = estadoVerificacion;
+        this.pais = pais;
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public String getEstadoVerificacion() {
+        return estadoVerificacion;
+    }
+
+    public void setEstadoVerificacion(String estadoVerificacion) {
+        this.estadoVerificacion = estadoVerificacion;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+}
+
+
+=== CLASE: PoliticaDevolucion.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "politica_devolucion")
+public class PoliticaDevolucion implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "evento_id")
+    private int eventoId;
+
+    @Column(name = "dias_maximos_previos")
+    private int diasMaximosPrevios;
+
+    @Column(name = "penalizacion_porcentaje")
+    private BigDecimal penalizacionPorcentaje;
+
+    @Column(name = "estado_activo")
+    private boolean estadoActivo;
+
+    public PoliticaDevolucion() {
+    }
+
+    public PoliticaDevolucion(int id, int eventoId, int diasMaximosPrevios, BigDecimal penalizacionPorcentaje, boolean estadoActivo) {
+        this.id = id;
+        this.eventoId = eventoId;
+        this.diasMaximosPrevios = diasMaximosPrevios;
+        this.penalizacionPorcentaje = penalizacionPorcentaje;
+        this.estadoActivo = estadoActivo;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getEventoId() {
+        return eventoId;
+    }
+
+    public void setEventoId(int eventoId) {
+        this.eventoId = eventoId;
+    }
+
+    public int getDiasMaximosPrevios() {
+        return diasMaximosPrevios;
+    }
+
+    public void setDiasMaximosPrevios(int diasMaximosPrevios) {
+        this.diasMaximosPrevios = diasMaximosPrevios;
+    }
+
+    public BigDecimal getPenalizacionPorcentaje() {
+        return penalizacionPorcentaje;
+    }
+
+    public void setPenalizacionPorcentaje(BigDecimal penalizacionPorcentaje) {
+        this.penalizacionPorcentaje = penalizacionPorcentaje;
+    }
+
+    public boolean isEstadoActivo() {
+        return estadoActivo;
+    }
+
+    public void setEstadoActivo(boolean estadoActivo) {
+        this.estadoActivo = estadoActivo;
+    }
+}
+
+
+=== CLASE: PreferenciasMusicales.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "preferencias_musicales")
+public class PreferenciasMusicales implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "cliente_id")
+    private int clienteId;
+
+    @Column(name = "genero_favorito")
+    private String generoFavorito;
+
+    @Column(name = "artista_favorito")
+    private String artistaFavorito;
+
+    public PreferenciasMusicales() {
+    }
+
+    public PreferenciasMusicales(int id, int clienteId, String generoFavorito, String artistaFavorito) {
+        this.id = id;
+        this.clienteId = clienteId;
+        this.generoFavorito = generoFavorito;
+        this.artistaFavorito = artistaFavorito;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public String getGeneroFavorito() {
+        return generoFavorito;
+    }
+
+    public void setGeneroFavorito(String generoFavorito) {
+        this.generoFavorito = generoFavorito;
+    }
+
+    public String getArtistaFavorito() {
+        return artistaFavorito;
+    }
+
+    public void setArtistaFavorito(String artistaFavorito) {
+        this.artistaFavorito = artistaFavorito;
+    }
+}
+
+
+=== CLASE: ReclamoSoporte.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "reclamo_soporte")
+public class ReclamoSoporte implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "cliente_id")
+    private int clienteId;
+
+    private String asunto;
+
+    private String detalle;
+
+    private String estado;
+
+    public ReclamoSoporte() {
+    }
+
+    public ReclamoSoporte(int id, int clienteId, String asunto, String detalle, String estado) {
+        this.id = id;
+        this.clienteId = clienteId;
+        this.asunto = asunto;
+        this.detalle = detalle;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+}
+
+
+=== CLASE: TicketQR_Dinamico.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "ticket_qr_dinamico")
+public class TicketQR_Dinamico implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "entrada_id")
+    private int entradaId;
+
+    @Column(name = "token_encriptado")
+    private String tokenEncriptado;
+
+    @Column(name = "fecha_expiracion")
+    private LocalDateTime fechaExpiracion;
+
+    @Column(name = "iteracion_clave")
+    private int iteracionClave;
+
+    public TicketQR_Dinamico() {
+    }
+
+    public TicketQR_Dinamico(int id, int entradaId, String tokenEncriptado, LocalDateTime fechaExpiracion, int iteracionClave) {
+        this.id = id;
+        this.entradaId = entradaId;
+        this.tokenEncriptado = tokenEncriptado;
+        this.fechaExpiracion = fechaExpiracion;
+        this.iteracionClave = iteracionClave;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getEntradaId() {
+        return entradaId;
+    }
+
+    public void setEntradaId(int entradaId) {
+        this.entradaId = entradaId;
+    }
+
+    public String getTokenEncriptado() {
+        return tokenEncriptado;
+    }
+
+    public void setTokenEncriptado(String tokenEncriptado) {
+        this.tokenEncriptado = tokenEncriptado;
+    }
+
+    public LocalDateTime getFechaExpiracion() {
+        return fechaExpiracion;
+    }
+
+    public void setFechaExpiracion(LocalDateTime fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
+    }
+
+    public int getIteracionClave() {
+        return iteracionClave;
+    }
+
+    public void setIteracionClave(int iteracionClave) {
+        this.iteracionClave = iteracionClave;
+    }
+}
+
+
+=== CLASE: TransaccionCompra.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "transaccion_compra")
+public class TransaccionCompra implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "cliente_id")
+    private int clienteId;
+
+    @Column(name = "cupon_id")
+    private int cuponId;
+
+    @Column(name = "fecha_transaccion")
+    private LocalDateTime fechaTransaccion;
+
+    @Column(name = "total_calculado")
+    private BigDecimal totalCalculado;
+
+    public TransaccionCompra() {
+    }
+
+    public TransaccionCompra(int id, int clienteId, int cuponId, LocalDateTime fechaTransaccion, BigDecimal totalCalculado) {
+        this.id = id;
+        this.clienteId = clienteId;
+        this.cuponId = cuponId;
+        this.fechaTransaccion = fechaTransaccion;
+        this.totalCalculado = totalCalculado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public int getCuponId() {
+        return cuponId;
+    }
+
+    public void setCuponId(int cuponId) {
+        this.cuponId = cuponId;
+    }
+
+    public LocalDateTime getFechaTransaccion() {
+        return fechaTransaccion;
+    }
+
+    public void setFechaTransaccion(LocalDateTime fechaTransaccion) {
+        this.fechaTransaccion = fechaTransaccion;
+    }
+
+    public BigDecimal getTotalCalculado() {
+        return totalCalculado;
+    }
+
+    public void setTotalCalculado(BigDecimal totalCalculado) {
+        this.totalCalculado = totalCalculado;
+    }
+}
+
+
+=== CLASE: UsuarioCliente.java ===
+package pe.edu.utp.eventope.model;
+
+import jakarta.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "usuario_cliente")
+public class UsuarioCliente implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    private String nombres;
+
+    private String apellidos;
+
+    private String dni;
+
+    private String email;
+
+    private String telefono;
+
+    public UsuarioCliente() {
+    }
+
+    public UsuarioCliente(int id, String nombres, String apellidos, String dni, String email, String telefono) {
+        this.id = id;
+        this.nombres = nombres;
+        this.apellidos = apellidos;
+        this.dni = dni;
+        this.email = email;
+        this.telefono = telefono;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNombres() {
+        return nombres;
+    }
+
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
+    }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+}
+
+
