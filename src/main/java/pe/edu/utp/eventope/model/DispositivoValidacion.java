@@ -1,54 +1,50 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "dispositivo_validacion")
+/** Datos de dispositivo_validacion. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class DispositivoValidacion implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+    private int operadorId;
+    private int eventoId;
+    private String nombrePuerta;
+    private String modeloCelular;
+    private String tokenAccesoHash;
+    private String estadoDispositivo;
 
-    @Column(name = "codigo_dispositivo")
-    private String codigoDispositivo;
+    public DispositivoValidacion() {}
 
-    private String estado;
-
-    public DispositivoValidacion() {
-    }
-
-    public DispositivoValidacion(int id, String codigoDispositivo, String estado) {
+    public DispositivoValidacion(int id, int operadorId, int eventoId, String nombrePuerta, String modeloCelular, String tokenAccesoHash, String estadoDispositivo) {
         this.id = id;
-        this.codigoDispositivo = codigoDispositivo;
-        this.estado = estado;
+        this.operadorId = operadorId;
+        this.eventoId = eventoId;
+        this.nombrePuerta = nombrePuerta;
+        this.modeloCelular = modeloCelular;
+        this.tokenAccesoHash = tokenAccesoHash;
+        this.estadoDispositivo = estadoDispositivo;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getOperadorId() { return operadorId; }
+    public void setOperadorId(int operadorId) { this.operadorId = operadorId; }
 
-    public String getCodigoDispositivo() {
-        return codigoDispositivo;
-    }
+    public int getEventoId() { return eventoId; }
+    public void setEventoId(int eventoId) { this.eventoId = eventoId; }
 
-    public void setCodigoDispositivo(String codigoDispositivo) {
-        this.codigoDispositivo = codigoDispositivo;
-    }
+    public String getNombrePuerta() { return nombrePuerta; }
+    public void setNombrePuerta(String nombrePuerta) { this.nombrePuerta = nombrePuerta; }
 
-    public String getEstado() {
-        return estado;
-    }
+    public String getModeloCelular() { return modeloCelular; }
+    public void setModeloCelular(String modeloCelular) { this.modeloCelular = modeloCelular; }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public String getTokenAccesoHash() { return tokenAccesoHash; }
+    public void setTokenAccesoHash(String tokenAccesoHash) { this.tokenAccesoHash = tokenAccesoHash; }
+
+    public String getEstadoDispositivo() { return estadoDispositivo; }
+    public void setEstadoDispositivo(String estadoDispositivo) { this.estadoDispositivo = estadoDispositivo; }
+
+
 }

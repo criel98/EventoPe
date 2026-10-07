@@ -1,55 +1,61 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "incidencia_acceso")
+/** Datos de incidencia_acceso. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class IncidenciaAcceso implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
+    private int controlId;
+    private String tipoIncidencia;
     private String descripcion;
+    private String severidad;
+    private String estadoResolucion;
+    private Integer resueltaPorId;
+    private LocalDateTime fechaResolucion;
+    private String motivoResolucion;
 
-    @Column(name = "fecha_hora")
-    private LocalDateTime fechaHora;
+    public IncidenciaAcceso() {}
 
-    public IncidenciaAcceso() {
-    }
-
-    public IncidenciaAcceso(int id, String descripcion, LocalDateTime fechaHora) {
+    public IncidenciaAcceso(int id, int controlId, String tipoIncidencia, String descripcion, String severidad, String estadoResolucion, Integer resueltaPorId, LocalDateTime fechaResolucion, String motivoResolucion) {
         this.id = id;
+        this.controlId = controlId;
+        this.tipoIncidencia = tipoIncidencia;
         this.descripcion = descripcion;
-        this.fechaHora = fechaHora;
+        this.severidad = severidad;
+        this.estadoResolucion = estadoResolucion;
+        this.resueltaPorId = resueltaPorId;
+        this.fechaResolucion = fechaResolucion;
+        this.motivoResolucion = motivoResolucion;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getControlId() { return controlId; }
+    public void setControlId(int controlId) { this.controlId = controlId; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getTipoIncidencia() { return tipoIncidencia; }
+    public void setTipoIncidencia(String tipoIncidencia) { this.tipoIncidencia = tipoIncidencia; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
-    }
+    public String getSeveridad() { return severidad; }
+    public void setSeveridad(String severidad) { this.severidad = severidad; }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
-    }
+    public String getEstadoResolucion() { return estadoResolucion; }
+    public void setEstadoResolucion(String estadoResolucion) { this.estadoResolucion = estadoResolucion; }
+
+    public Integer getResueltaPorId() { return resueltaPorId; }
+    public void setResueltaPorId(Integer resueltaPorId) { this.resueltaPorId = resueltaPorId; }
+
+    public LocalDateTime getFechaResolucion() { return fechaResolucion; }
+    public void setFechaResolucion(LocalDateTime fechaResolucion) { this.fechaResolucion = fechaResolucion; }
+
+    public String getMotivoResolucion() { return motivoResolucion; }
+    public void setMotivoResolucion(String motivoResolucion) { this.motivoResolucion = motivoResolucion; }
+
+
 }

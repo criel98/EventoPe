@@ -1,76 +1,61 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "reclamo_soporte")
+/** Datos de reclamo_soporte. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class ReclamoSoporte implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    @Column(name = "cliente_id")
     private int clienteId;
-
+    private Integer adminId;
+    private Integer incidenciaId;
     private String asunto;
+    private String descripcion;
+    private String estadoReclamo;
+    private LocalDateTime fechaCreacion;
+    private String respuesta;
 
-    private String detalle;
+    public ReclamoSoporte() {}
 
-    private String estado;
-
-    public ReclamoSoporte() {
-    }
-
-    public ReclamoSoporte(int id, int clienteId, String asunto, String detalle, String estado) {
+    public ReclamoSoporte(int id, int clienteId, Integer adminId, Integer incidenciaId, String asunto, String descripcion, String estadoReclamo, LocalDateTime fechaCreacion, String respuesta) {
         this.id = id;
         this.clienteId = clienteId;
+        this.adminId = adminId;
+        this.incidenciaId = incidenciaId;
         this.asunto = asunto;
-        this.detalle = detalle;
-        this.estado = estado;
+        this.descripcion = descripcion;
+        this.estadoReclamo = estadoReclamo;
+        this.fechaCreacion = fechaCreacion;
+        this.respuesta = respuesta;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getClienteId() { return clienteId; }
+    public void setClienteId(int clienteId) { this.clienteId = clienteId; }
 
-    public int getClienteId() {
-        return clienteId;
-    }
+    public Integer getAdminId() { return adminId; }
+    public void setAdminId(Integer adminId) { this.adminId = adminId; }
 
-    public void setClienteId(int clienteId) {
-        this.clienteId = clienteId;
-    }
+    public Integer getIncidenciaId() { return incidenciaId; }
+    public void setIncidenciaId(Integer incidenciaId) { this.incidenciaId = incidenciaId; }
 
-    public String getAsunto() {
-        return asunto;
-    }
+    public String getAsunto() { return asunto; }
+    public void setAsunto(String asunto) { this.asunto = asunto; }
 
-    public void setAsunto(String asunto) {
-        this.asunto = asunto;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public String getDetalle() {
-        return detalle;
-    }
+    public String getEstadoReclamo() { return estadoReclamo; }
+    public void setEstadoReclamo(String estadoReclamo) { this.estadoReclamo = estadoReclamo; }
 
-    public void setDetalle(String detalle) {
-        this.detalle = detalle;
-    }
+    public LocalDateTime getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(LocalDateTime fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 
-    public String getEstado() {
-        return estado;
-    }
+    public String getRespuesta() { return respuesta; }
+    public void setRespuesta(String respuesta) { this.respuesta = respuesta; }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+
 }

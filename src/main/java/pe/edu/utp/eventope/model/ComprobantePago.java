@@ -1,78 +1,41 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "comprobante_pago")
+/** Datos de comprobante_pago. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class ComprobantePago implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+    private int transaccionId;
+    private String serieCorrelativo;
+    private String tipoComprobante;
+    private LocalDateTime fechaEmision;
 
-    private LocalDateTime fecha;
+    public ComprobantePago() {}
 
-    private BigDecimal monto;
-
-    @Column(name = "metodo_pago_id")
-    private int metodoPagoId;
-
-    private String estado;
-
-    public ComprobantePago() {
-    }
-
-    public ComprobantePago(int id, LocalDateTime fecha, BigDecimal monto, int metodoPagoId, String estado) {
+    public ComprobantePago(int id, int transaccionId, String serieCorrelativo, String tipoComprobante, LocalDateTime fechaEmision) {
         this.id = id;
-        this.fecha = fecha;
-        this.monto = monto;
-        this.metodoPagoId = metodoPagoId;
-        this.estado = estado;
+        this.transaccionId = transaccionId;
+        this.serieCorrelativo = serieCorrelativo;
+        this.tipoComprobante = tipoComprobante;
+        this.fechaEmision = fechaEmision;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getTransaccionId() { return transaccionId; }
+    public void setTransaccionId(int transaccionId) { this.transaccionId = transaccionId; }
 
-    public LocalDateTime getFecha() {
-        return fecha;
-    }
+    public String getSerieCorrelativo() { return serieCorrelativo; }
+    public void setSerieCorrelativo(String serieCorrelativo) { this.serieCorrelativo = serieCorrelativo; }
 
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
+    public String getTipoComprobante() { return tipoComprobante; }
+    public void setTipoComprobante(String tipoComprobante) { this.tipoComprobante = tipoComprobante; }
 
-    public BigDecimal getMonto() {
-        return monto;
-    }
+    public LocalDateTime getFechaEmision() { return fechaEmision; }
+    public void setFechaEmision(LocalDateTime fechaEmision) { this.fechaEmision = fechaEmision; }
 
-    public void setMonto(BigDecimal monto) {
-        this.monto = monto;
-    }
 
-    public int getMetodoPagoId() {
-        return metodoPagoId;
-    }
-
-    public void setMetodoPagoId(int metodoPagoId) {
-        this.metodoPagoId = metodoPagoId;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 }

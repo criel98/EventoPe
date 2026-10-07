@@ -1,54 +1,46 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "categoria_asiento")
+/** Datos de categoria_asiento. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class CategoriaAsiento implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+    private int eventoId;
+    private String nombreZona;
+    private BigDecimal precioBase;
+    private int aforoTotal;
+    private int aforoDisponible;
 
-    private String nombre;
+    public CategoriaAsiento() {}
 
-    private BigDecimal precio;
-
-    public CategoriaAsiento() {
-    }
-
-    public CategoriaAsiento(int id, String nombre, BigDecimal precio) {
+    public CategoriaAsiento(int id, int eventoId, String nombreZona, BigDecimal precioBase, int aforoTotal, int aforoDisponible) {
         this.id = id;
-        this.nombre = nombre;
-        this.precio = precio;
+        this.eventoId = eventoId;
+        this.nombreZona = nombreZona;
+        this.precioBase = precioBase;
+        this.aforoTotal = aforoTotal;
+        this.aforoDisponible = aforoDisponible;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getEventoId() { return eventoId; }
+    public void setEventoId(int eventoId) { this.eventoId = eventoId; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombreZona() { return nombreZona; }
+    public void setNombreZona(String nombreZona) { this.nombreZona = nombreZona; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public BigDecimal getPrecioBase() { return precioBase; }
+    public void setPrecioBase(BigDecimal precioBase) { this.precioBase = precioBase; }
 
-    public BigDecimal getPrecio() {
-        return precio;
-    }
+    public int getAforoTotal() { return aforoTotal; }
+    public void setAforoTotal(int aforoTotal) { this.aforoTotal = aforoTotal; }
 
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
+    public int getAforoDisponible() { return aforoDisponible; }
+    public void setAforoDisponible(int aforoDisponible) { this.aforoDisponible = aforoDisponible; }
+
+    public boolean hayCupo(int cantidad) { return cantidad > 0 && cantidad <= aforoDisponible; }
 }

@@ -1,64 +1,40 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "metodo_pago")
+/** Datos de metodo_pago. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class MetodoPago implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+    private int transaccionId;
+    private String nombreMetodo;
+    private String nroOperacion;
+    private String estadoTransaccion;
 
-    private String tipo;
+    public MetodoPago() {}
 
-    private String referencia;
-
-    private boolean confirmado;
-
-    public MetodoPago() {
-    }
-
-    public MetodoPago(int id, String tipo, String referencia, boolean confirmado) {
+    public MetodoPago(int id, int transaccionId, String nombreMetodo, String nroOperacion, String estadoTransaccion) {
         this.id = id;
-        this.tipo = tipo;
-        this.referencia = referencia;
-        this.confirmado = confirmado;
+        this.transaccionId = transaccionId;
+        this.nombreMetodo = nombreMetodo;
+        this.nroOperacion = nroOperacion;
+        this.estadoTransaccion = estadoTransaccion;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getTransaccionId() { return transaccionId; }
+    public void setTransaccionId(int transaccionId) { this.transaccionId = transaccionId; }
 
-    public String getTipo() {
-        return tipo;
-    }
+    public String getNombreMetodo() { return nombreMetodo; }
+    public void setNombreMetodo(String nombreMetodo) { this.nombreMetodo = nombreMetodo; }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+    public String getNroOperacion() { return nroOperacion; }
+    public void setNroOperacion(String nroOperacion) { this.nroOperacion = nroOperacion; }
 
-    public String getReferencia() {
-        return referencia;
-    }
+    public String getEstadoTransaccion() { return estadoTransaccion; }
+    public void setEstadoTransaccion(String estadoTransaccion) { this.estadoTransaccion = estadoTransaccion; }
 
-    public void setReferencia(String referencia) {
-        this.referencia = referencia;
-    }
 
-    public boolean isConfirmado() {
-        return confirmado;
-    }
-
-    public void setConfirmado(boolean confirmado) {
-        this.confirmado = confirmado;
-    }
 }

@@ -1,33 +1,17 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "boleto_nominado")
+/** Datos de boleto_nominado. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class BoletoNominado implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    @Column(name = "entrada_id")
     private int entradaId;
-
-    @Column(name = "dni_asistente")
     private String dniAsistente;
-
-    @Column(name = "nombres_asistente")
     private String nombresAsistente;
-
-    @Column(name = "apellidos_asistente")
     private String apellidosAsistente;
 
-    public BoletoNominado() {
-    }
+    public BoletoNominado() {}
 
     public BoletoNominado(int id, int entradaId, String dniAsistente, String nombresAsistente, String apellidosAsistente) {
         this.id = id;
@@ -37,43 +21,20 @@ public class BoletoNominado implements Serializable {
         this.apellidosAsistente = apellidosAsistente;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getEntradaId() { return entradaId; }
+    public void setEntradaId(int entradaId) { this.entradaId = entradaId; }
 
-    public int getEntradaId() {
-        return entradaId;
-    }
+    public String getDniAsistente() { return dniAsistente; }
+    public void setDniAsistente(String dniAsistente) { this.dniAsistente = dniAsistente; }
 
-    public void setEntradaId(int entradaId) {
-        this.entradaId = entradaId;
-    }
+    public String getNombresAsistente() { return nombresAsistente; }
+    public void setNombresAsistente(String nombresAsistente) { this.nombresAsistente = nombresAsistente; }
 
-    public String getDniAsistente() {
-        return dniAsistente;
-    }
+    public String getApellidosAsistente() { return apellidosAsistente; }
+    public void setApellidosAsistente(String apellidosAsistente) { this.apellidosAsistente = apellidosAsistente; }
 
-    public void setDniAsistente(String dniAsistente) {
-        this.dniAsistente = dniAsistente;
-    }
 
-    public String getNombresAsistente() {
-        return nombresAsistente;
-    }
-
-    public void setNombresAsistente(String nombresAsistente) {
-        this.nombresAsistente = nombresAsistente;
-    }
-
-    public String getApellidosAsistente() {
-        return apellidosAsistente;
-    }
-
-    public void setApellidosAsistente(String apellidosAsistente) {
-        this.apellidosAsistente = apellidosAsistente;
-    }
 }

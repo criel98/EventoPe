@@ -1,0 +1,12 @@
+target/
+config/*.local.properties
+*.log
+.idea/
+*.iml
+/target/
+*.log
+config/*.local.properties
+.env
+.idea/
+*.iml
+.DS_Store

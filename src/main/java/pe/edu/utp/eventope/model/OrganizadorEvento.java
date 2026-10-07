@@ -1,54 +1,40 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "organizador_evento")
+/** Datos de organizador_evento. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class OrganizadorEvento implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
+    private String ruc;
+    private String razonSocial;
+    private String emailContacto;
+    private String telefono;
 
-    @Column(name = "nombre_empresa")
-    private String nombreEmpresa;
+    public OrganizadorEvento() {}
 
-    private String contacto;
-
-    public OrganizadorEvento() {
-    }
-
-    public OrganizadorEvento(int id, String nombreEmpresa, String contacto) {
+    public OrganizadorEvento(int id, String ruc, String razonSocial, String emailContacto, String telefono) {
         this.id = id;
-        this.nombreEmpresa = nombreEmpresa;
-        this.contacto = contacto;
+        this.ruc = ruc;
+        this.razonSocial = razonSocial;
+        this.emailContacto = emailContacto;
+        this.telefono = telefono;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getRuc() { return ruc; }
+    public void setRuc(String ruc) { this.ruc = ruc; }
 
-    public String getNombreEmpresa() {
-        return nombreEmpresa;
-    }
+    public String getRazonSocial() { return razonSocial; }
+    public void setRazonSocial(String razonSocial) { this.razonSocial = razonSocial; }
 
-    public void setNombreEmpresa(String nombreEmpresa) {
-        this.nombreEmpresa = nombreEmpresa;
-    }
+    public String getEmailContacto() { return emailContacto; }
+    public void setEmailContacto(String emailContacto) { this.emailContacto = emailContacto; }
 
-    public String getContacto() {
-        return contacto;
-    }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public void setContacto(String contacto) {
-        this.contacto = contacto;
-    }
+
 }

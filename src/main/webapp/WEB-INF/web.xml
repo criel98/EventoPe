@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" version="6.0">
+  <display-name>EventoPe</display-name>
+  <!-- El orden importa: configurar UTF-8 antes de leer parámetros del formulario. -->
+  <filter><filter-name>utf8</filter-name><filter-class>pe.edu.utp.eventope.filter.Utf8Filter</filter-class></filter>
+  <filter><filter-name>sesion</filter-name><filter-class>pe.edu.utp.eventope.filter.SesionFilter</filter-class></filter>
+  <filter><filter-name>csrf</filter-name><filter-class>pe.edu.utp.eventope.filter.CsrfFilter</filter-class></filter>
+  <filter-mapping><filter-name>utf8</filter-name><url-pattern>/*</url-pattern></filter-mapping>
+  <filter-mapping><filter-name>sesion</filter-name><url-pattern>/cuenta/*</url-pattern><url-pattern>/compras/*</url-pattern><url-pattern>/entradas/*</url-pattern><url-pattern>/seguridad/*</url-pattern></filter-mapping>
+  <filter-mapping><filter-name>csrf</filter-name><url-pattern>/*</url-pattern></filter-mapping>
+  <session-config><session-timeout>20</session-timeout><cookie-config><http-only>true</http-only><secure>true</secure></cookie-config><tracking-mode>COOKIE</tracking-mode></session-config>
+</web-app>

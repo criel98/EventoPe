@@ -1,64 +1,40 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "local_concierto")
+/** Datos de local_concierto. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class LocalConcierto implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    private String nombre;
-
+    private String nombreLocal;
     private String direccion;
+    private int capacidadMax;
+    private String ciudad;
 
-    private int capacidad;
+    public LocalConcierto() {}
 
-    public LocalConcierto() {
-    }
-
-    public LocalConcierto(int id, String nombre, String direccion, int capacidad) {
+    public LocalConcierto(int id, String nombreLocal, String direccion, int capacidadMax, String ciudad) {
         this.id = id;
-        this.nombre = nombre;
+        this.nombreLocal = nombreLocal;
         this.direccion = direccion;
-        this.capacidad = capacidad;
+        this.capacidadMax = capacidadMax;
+        this.ciudad = ciudad;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getNombreLocal() { return nombreLocal; }
+    public void setNombreLocal(String nombreLocal) { this.nombreLocal = nombreLocal; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public int getCapacidadMax() { return capacidadMax; }
+    public void setCapacidadMax(int capacidadMax) { this.capacidadMax = capacidadMax; }
 
-    public String getDireccion() {
-        return direccion;
-    }
+    public String getCiudad() { return ciudad; }
+    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
 
-    public int getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
-    }
 }

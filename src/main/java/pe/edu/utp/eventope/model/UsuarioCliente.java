@@ -1,86 +1,55 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "usuario_cliente")
+/** Datos de usuario_cliente. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class UsuarioCliente implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
     private String nombres;
-
     private String apellidos;
-
     private String dni;
-
     private String email;
-
+    private String contrasenaHash;
     private String telefono;
+    private String estado;
 
-    public UsuarioCliente() {
-    }
+    public UsuarioCliente() {}
 
-    public UsuarioCliente(int id, String nombres, String apellidos, String dni, String email, String telefono) {
+    public UsuarioCliente(int id, String nombres, String apellidos, String dni, String email, String contrasenaHash, String telefono, String estado) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.dni = dni;
         this.email = email;
+        this.contrasenaHash = contrasenaHash;
         this.telefono = telefono;
+        this.estado = estado;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getNombres() { return nombres; }
+    public void setNombres(String nombres) { this.nombres = nombres; }
 
-    public String getNombres() {
-        return nombres;
-    }
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
+    public String getDni() { return dni; }
+    public void setDni(String dni) { this.dni = dni; }
 
-    public String getApellidos() {
-        return apellidos;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
+    public String getContrasenaHash() { return contrasenaHash; }
+    public void setContrasenaHash(String contrasenaHash) { this.contrasenaHash = contrasenaHash; }
 
-    public String getDni() {
-        return dni;
-    }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
 }

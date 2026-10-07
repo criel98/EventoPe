@@ -1,79 +1,53 @@
 package pe.edu.utp.eventope.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "entrada_digital")
+/** Datos de entrada_digital. Persistencia JDBC externa; no exponga entidades con secretos a JSP. */
 public class EntradaDigital implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    @Column(name = "codigo_entrada")
     private String codigoEntrada;
-
-    @Column(name = "evento_id")
     private int eventoId;
-
-    @Column(name = "comprador_id")
+    private int categoriaId;
     private int compradorId;
-
-    @Column(name = "estado_uso")
     private String estadoUso;
+    private LocalDateTime fechaEmision;
 
-    public EntradaDigital() {
-    }
+    public EntradaDigital() {}
 
-    public EntradaDigital(int id, String codigoEntrada, int eventoId, int compradorId, String estadoUso) {
+    public EntradaDigital(int id, String codigoEntrada, int eventoId, int categoriaId, int compradorId, String estadoUso, LocalDateTime fechaEmision) {
         this.id = id;
         this.codigoEntrada = codigoEntrada;
         this.eventoId = eventoId;
+        this.categoriaId = categoriaId;
         this.compradorId = compradorId;
         this.estadoUso = estadoUso;
+        this.fechaEmision = fechaEmision;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getCodigoEntrada() { return codigoEntrada; }
+    public void setCodigoEntrada(String codigoEntrada) { this.codigoEntrada = codigoEntrada; }
 
-    public String getCodigoEntrada() {
-        return codigoEntrada;
-    }
+    public int getEventoId() { return eventoId; }
+    public void setEventoId(int eventoId) { this.eventoId = eventoId; }
 
-    public void setCodigoEntrada(String codigoEntrada) {
-        this.codigoEntrada = codigoEntrada;
-    }
+    public int getCategoriaId() { return categoriaId; }
+    public void setCategoriaId(int categoriaId) { this.categoriaId = categoriaId; }
 
-    public int getEventoId() {
-        return eventoId;
-    }
+    public int getCompradorId() { return compradorId; }
+    public void setCompradorId(int compradorId) { this.compradorId = compradorId; }
 
-    public void setEventoId(int eventoId) {
-        this.eventoId = eventoId;
-    }
+    public String getEstadoUso() { return estadoUso; }
+    public void setEstadoUso(String estadoUso) { this.estadoUso = estadoUso; }
 
-    public int getCompradorId() {
-        return compradorId;
-    }
+    public LocalDateTime getFechaEmision() { return fechaEmision; }
+    public void setFechaEmision(LocalDateTime fechaEmision) { this.fechaEmision = fechaEmision; }
 
-    public void setCompradorId(int compradorId) {
-        this.compradorId = compradorId;
-    }
-
-    public String getEstadoUso() {
-        return estadoUso;
-    }
-
-    public void setEstadoUso(String estadoUso) {
-        this.estadoUso = estadoUso;
-    }
+    public boolean estaDisponible() { return "DISPONIBLE".equals(estadoUso); }
+    public void marcarUtilizada() { if (!estaDisponible()) throw new IllegalStateException("Entrada no disponible"); estadoUso = "UTILIZADA"; }
+    public void anular() { if (!estaDisponible()) throw new IllegalStateException("Entrada no disponible"); estadoUso = "ANULADA"; }
 }
