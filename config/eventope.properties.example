@@ -1,0 +1,7 @@
+# Copiar FUERA de src y del WAR. Nunca versionar la copia con valores reales.
+# -Deventope.config=C:/ruta/privada/eventope.local.properties en las opciones JVM de Tomcat.
+db.url=jdbc:mysql://127.0.0.1:3306/eventope_semana10?connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true
+db.user=REEMPLAZAR
+db.password=REEMPLAZAR
+# Base64 de 32 bytes aleatorios. Generar con GenerarClaveMaestra, no reutilizar claves de pruebas.
+totp.masterKey=REEMPLAZAR

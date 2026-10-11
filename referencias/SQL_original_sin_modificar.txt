@@ -1,0 +1,263 @@
+-- 1. organizador_evento
+CREATE TABLE organizador_evento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ruc VARCHAR(11) NOT NULL UNIQUE,
+    razon_social VARCHAR(150) NOT NULL,
+    email_contacto VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20)
+);
+
+-- 2. local_concierto
+CREATE TABLE local_concierto (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_local VARCHAR(100) NOT NULL,
+    direccion VARCHAR(200) NOT NULL,
+    capacidad_max INT NOT NULL,
+    ciudad VARCHAR(50) NOT NULL
+);
+
+-- 3. artista
+CREATE TABLE artista (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_artistico VARCHAR(100) NOT NULL,
+    genero_musical VARCHAR(50),
+    pais_origen VARCHAR(50),
+    red_social VARCHAR(150)
+);
+
+-- 4. evento_cultural
+CREATE TABLE evento_cultural (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    fecha DATETIME NOT NULL,
+    aforo INT NOT NULL,
+    local_id INT NOT NULL,
+    organizador_id INT NOT NULL,
+    artista_id INT NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO',
+    FOREIGN KEY (local_id) REFERENCES local_concierto(id),
+    FOREIGN KEY (organizador_id) REFERENCES organizador_evento(id),
+    FOREIGN KEY (artista_id) REFERENCES artista(id)
+);
+
+-- 5. categoria_asiento
+CREATE TABLE categoria_asiento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_zona VARCHAR(50) NOT NULL,
+    precio_base DECIMAL(10, 2) NOT NULL,
+    aforo_disponible INT NOT NULL,
+    evento_id INT NOT NULL,
+    FOREIGN KEY (evento_id) REFERENCES evento_cultural(id) ON DELETE CASCADE
+);
+MÓDULO 2: Clientes y Perfiles (Integrante 2)
+Este módulo se enfoca en registrar los perfiles de los compradores y aplicar la validación de identidad requerida para mitigar bots
+.
+-- 6. usuario_cliente
+CREATE TABLE usuario_cliente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    dni VARCHAR(8) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    telefono VARCHAR(20)
+);
+
+-- 7. perfil_usuario
+CREATE TABLE perfil_usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL UNIQUE,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado_verificacion BOOLEAN DEFAULT FALSE,
+    pais VARCHAR(50),
+    fecha_nacimiento DATE,
+    FOREIGN KEY (cliente_id) REFERENCES usuario_cliente(id) ON DELETE CASCADE
+);
+
+-- 8. historial_compra
+CREATE TABLE historial_compra (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    total_boletos_comprados INT DEFAULT 0,
+    ultima_compra_fecha DATETIME,
+    FOREIGN KEY (cliente_id) REFERENCES usuario_cliente(id) ON DELETE CASCADE
+);
+
+-- 9. preferencias_musicales
+CREATE TABLE preferencias_musicales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    genero_favorito VARCHAR(50),
+    artista_favorito VARCHAR(100),
+    FOREIGN KEY (cliente_id) REFERENCES usuario_cliente(id) ON DELETE CASCADE
+);
+
+-- 10. administrador_plataforma
+CREATE TABLE administrador_plataforma (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    nivel_acceso VARCHAR(20) NOT NULL,
+    area_soporte VARCHAR(50)
+);
+MÓDULO 3: Venta y Transacciones (Integrante 3)
+Maneja las órdenes de pago, emisión de comprobantes autorizados y descuentos del sistema de ticketing
+.
+-- 11. transaccion_compra
+CREATE TABLE transaccion_compra (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_unico VARCHAR(50) NOT NULL UNIQUE,
+    cliente_id INT NOT NULL,
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    igv DECIMAL(10, 2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES usuario_cliente(id)
+);
+
+-- 12. comprobante_pago
+CREATE TABLE comprobante_pago (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    transaccion_id INT NOT NULL UNIQUE,
+    serie_correlativo VARCHAR(20) NOT NULL,
+    ruc_emisor VARCHAR(11) NOT NULL,
+    tipo_comprobante VARCHAR(20) NOT NULL, -- 'BOLETA' o 'FACTURA'
+    FOREIGN KEY (transaccion_id) REFERENCES transaccion_compra(id) ON DELETE CASCADE
+);
+
+-- 13. metodo_pago
+CREATE TABLE metodo_pago (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    transaccion_id INT NOT NULL UNIQUE,
+    nombre_metodo VARCHAR(50) NOT NULL, -- 'YAPE', 'PLIN', 'TARJETA'
+    nro_operacion VARCHAR(50) NOT NULL,
+    estado_transaccion VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE',
+    FOREIGN KEY (transaccion_id) REFERENCES transaccion_compra(id) ON DELETE CASCADE
+);
+
+-- 14. cupon_descuento
+CREATE TABLE cupon_descuento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_cupon VARCHAR(20) NOT NULL UNIQUE,
+    porcentaje_descuento DECIMAL(5, 2) NOT NULL,
+    fecha_expiracion DATE NOT NULL,
+    estado VARCHAR(20) DEFAULT 'ACTIVO'
+);
+MÓDULO 4: Boletos y Seguridad Anti-Reventa (Integrante 4)
+La parte más crítica del software: aquí se controlan las entradas digitales, las llaves rotativas de los QR de seguridad y la nominación obligatoria de asistentes
+.
+-- 15. entrada_digital
+CREATE TABLE entrada_digital (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_entrada VARCHAR(50) NOT NULL UNIQUE,
+    evento_id INT NOT NULL,
+    comprador_id INT NOT NULL,
+    estado_uso VARCHAR(20) NOT NULL DEFAULT 'SIN_USAR', -- 'SIN_USAR', 'USADO', 'ANULADO'
+    FOREIGN KEY (evento_id) REFERENCES evento_cultural(id),
+    FOREIGN KEY (comprador_id) REFERENCES usuario_cliente(id)
+);
+
+-- 16. detalle_transaccion
+CREATE TABLE detalle_transaccion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    transaccion_id INT NOT NULL,
+    entrada_id INT NOT NULL,
+    precio_aplicado DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (transaccion_id) REFERENCES transaccion_compra(id) ON DELETE CASCADE,
+    FOREIGN KEY (entrada_id) REFERENCES entrada_digital(id)
+);
+
+-- 17. ticket_qr_dinamico
+CREATE TABLE ticket_qr_dinamico (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entrada_id INT NOT NULL UNIQUE,
+    token_encriptado TEXT NOT NULL,
+    fecha_expiracion DATETIME NOT NULL,
+    iteracion_clave INT NOT NULL,
+    FOREIGN KEY (entrada_id) REFERENCES entrada_digital(id) ON DELETE CASCADE
+);
+
+-- 18. historial_rotacion_qr
+CREATE TABLE historial_rotacion_qr (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    qr_id INT NOT NULL,
+    hora_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    hash_anterior VARCHAR(256) NOT NULL,
+    hash_nuevo VARCHAR(256) NOT NULL,
+    FOREIGN KEY (qr_id) REFERENCES ticket_qr_dinamico(id) ON DELETE CASCADE
+);
+
+-- 19. politica_devolucion
+CREATE TABLE politica_devolucion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    evento_id INT NOT NULL,
+    dias_maximos_previos INT NOT NULL,
+    penalizacion_porcentaje DECIMAL(5, 2) NOT NULL,
+    estado_activo BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (evento_id) REFERENCES evento_cultural(id) ON DELETE CASCADE
+);
+
+-- 20. boleto_nominado
+CREATE TABLE boleto_nominado (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    entrada_id INT NOT NULL UNIQUE,
+    dni_asistente VARCHAR(8) NOT NULL,
+    nombres_asistente VARCHAR(100) NOT NULL,
+    apellidos_asistente VARCHAR(100) NOT NULL,
+    FOREIGN KEY (entrada_id) REFERENCES entrada_digital(id) ON DELETE CASCADE
+);
+MÓDULO 5: Operación y Soporte (Integrante 5)
+Este módulo se encarga del registro en tiempo real de la validación en puerta, reporte de incidencias de acceso y soporte al cliente
+.
+-- 21. dispositivo_validacion
+CREATE TABLE dispositivo_validacion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    operador_responsable VARCHAR(100) NOT NULL,
+    modelo_celular VARCHAR(50),
+    token_acceso VARCHAR(100) NOT NULL,
+    estado_dispositivo VARCHAR(20) DEFAULT 'ACTIVO'
+);
+
+-- 22. control_acceso_puerta
+CREATE TABLE control_acceso_puerta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    evento_id INT NOT NULL,
+    dispositivo_id INT NOT NULL,
+    entrada_id INT NOT NULL,
+    hora_ingreso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado_acceso VARCHAR(20) NOT NULL, -- 'PERMITIDO', 'DENEGADO'
+    FOREIGN KEY (evento_id) REFERENCES evento_cultural(id),
+    FOREIGN KEY (dispositivo_id) REFERENCES dispositivo_validacion(id),
+    FOREIGN KEY (entrada_id) REFERENCES entrada_digital(id)
+);
+
+-- 23. incidencia_acceso
+CREATE TABLE incidencia_acceso (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    control_id INT NOT NULL,
+    tipo_incidencia VARCHAR(50) NOT NULL, -- 'QR_DUPLICADO', 'QR_EXPIRADO', 'ENTRADA_ANULADA'
+    descripcion TEXT,
+    severidad VARCHAR(20) NOT NULL, -- 'BAJA', 'MEDIA', 'ALTA'
+    FOREIGN KEY (control_id) REFERENCES control_acceso_puerta(id) ON DELETE CASCADE
+);
+
+-- 24. reclamo_soporte
+CREATE TABLE reclamo_soporte (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    asunto VARCHAR(150) NOT NULL,
+    descripcion TEXT NOT NULL,
+    estado_reclamo VARCHAR(20) DEFAULT 'ABIERTO', -- 'ABIERTO', 'EN_PROCESO', 'CERRADO'
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES usuario_cliente(id) ON DELETE CASCADE
+);
+
+-- 25. notificacion_usuario
+CREATE TABLE notificacion_usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    titulo_mensaje VARCHAR(100) NOT NULL,
+    contenido TEXT NOT NULL,
+    fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    leido BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (cliente_id) REFERENCES usuario_cliente(id) ON DELETE CASCADE
+);
