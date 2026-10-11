@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="<c:url value='/assets/css/app.css'/>">
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/common/cabecera.jspf" />
+<%@ include file="/WEB-INF/views/common/cabecera.jspf" %>
 <main>
   <h1>Cartelera de eventos</h1>
 

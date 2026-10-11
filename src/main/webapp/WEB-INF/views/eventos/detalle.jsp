@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="<c:url value='/assets/css/app.css'/>">
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/common/cabecera.jspf" />
+<%@ include file="/WEB-INF/views/common/cabecera.jspf" %>
 <main>
   <a href="<c:url value='/eventos'/>">← Volver a la cartelera</a>
   <article class="tarjeta">
