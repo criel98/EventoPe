@@ -71,7 +71,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Registrarse</button>
-        </form>
+        </form> 
 
         <p style="margin-top: 20px;">
             ¿Ya tienes una cuenta? <a href="${pageContext.request.contextPath}/login">Inicia sesión aquí</a>
