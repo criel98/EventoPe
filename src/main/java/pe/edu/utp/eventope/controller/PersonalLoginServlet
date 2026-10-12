@@ -1,0 +1,66 @@
+package pe.edu.utp.eventope.controller;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import pe.edu.utp.eventope.dto.SesionUsuario;
+import pe.edu.utp.eventope.service.ServicioAutenticacion;
+import pe.edu.utp.eventope.util.Csrf;
+
+import java.io.IOException;
+import java.util.Optional;
+
+@WebServlet("/personal/login")
+public class PersonalLoginServlet extends HttpServlet {
+
+    private final ServicioAutenticacion servicioAutenticacion = new ServicioAutenticacion();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession sesion = req.getSession(true);
+        Csrf.token(sesion);
+        req.getRequestDispatcher("/WEB-INF/views/auth/personal-login.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String passwordStr = req.getParameter("password");
+
+        if (username == null || passwordStr == null) {
+            req.setAttribute("error", "Credenciales inválidas.");
+            req.getRequestDispatcher("/WEB-INF/views/auth/personal-login.jsp").forward(req, resp);
+            return;
+        }
+
+        char[] password = passwordStr.toCharArray();
+        Optional<SesionUsuario> optSesion = servicioAutenticacion.autenticarPersonal(username, password);
+
+        if (optSesion.isPresent()) {
+            SesionUsuario sesionUsuario = optSesion.get();
+
+            // Prevenir fijación de sesión
+            HttpSession oldSession = req.getSession(false);
+            if (oldSession != null) {
+                oldSession.invalidate();
+            }
+            HttpSession nuevaSesion = req.getSession(true);
+
+            nuevaSesion.setAttribute("sesionUsuario", sesionUsuario);
+            Csrf.token(nuevaSesion);
+
+            if (sesionUsuario.getRol() == SesionUsuario.Rol.VALIDACION) {
+                resp.sendRedirect(req.getContextPath() + "/seguridad/panel");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/admin/panel");
+            }
+        } else {
+            req.setAttribute("error", "Usuario o contraseña incorrectos.");
+            req.setAttribute("usernameIngresado", username);
+            req.getRequestDispatcher("/WEB-INF/views/auth/personal-login.jsp").forward(req, resp);
+        }
+    }
+}
