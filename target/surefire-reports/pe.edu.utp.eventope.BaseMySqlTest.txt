@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pe.edu.utp.eventope.BaseMySqlTest
+-------------------------------------------------------------------------------
+Tests run: 13, Failures: 0, Errors: 0, Skipped: 13, Time elapsed: 0.008 s -- in pe.edu.utp.eventope.BaseMySqlTest
