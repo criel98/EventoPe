@@ -12,7 +12,7 @@ La central, los perfiles del personal, la mensajería y los paneles administrati
 
 ## Estado de implementación
 
-La base común contiene 25 clases del dominio, esquema SQL, configuración JDBC, controles de sesión y formularios, servicios TOTP y de validación, pruebas automatizadas y estilos compartidos. La interfaz completa, la autenticación y la compra se encuentran pendientes de desarrollo e integración. Los resultados y límites de las pruebas se detallan en `docs/06_Verificacion.md`.
+La base común contiene las clases de dominio, esquema SQL, configuración JDBC, controles de sesión, servicios TOTP y de validación, pruebas y estilos compartidos. El flujo de carrito, nominación y compra de Ethan ya está implementado en esta versión de trabajo; su prueba real de integración requiere Maven y una base MySQL local configurada. La autenticación, catálogo y boletos de los demás responsables deben probarse e integrarse con este flujo. Consulta `docs/ETHAN_IMPLEMENTACION.md` para rutas, pruebas y GitHub.
 
 ## Responsabilidades
 
