@@ -1,0 +1,8 @@
+﻿Clase,Pruebas,Fallos,Errores,Omitidas
+pe.edu.utp.eventope.BaseMySqlTest,22,0,0,0
+pe.edu.utp.eventope.CatalogoMySqlTest,7,0,0,0
+pe.edu.utp.eventope.CifradoTest,2,0,0,0
+pe.edu.utp.eventope.CuentaMySqlTest,11,0,0,0
+pe.edu.utp.eventope.ModelosTest,3,0,0,0
+pe.edu.utp.eventope.PasswordTest,2,0,0,0
+pe.edu.utp.eventope.TotpTest,20,0,0,0

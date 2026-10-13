@@ -11,7 +11,7 @@ Lee `../03_Contratos.md`. Importa la base en tu propia MySQL y abre la carpeta q
 1. Crear `dao/EventoDAO.java` y `dao/CategoriaAsientoDAO.java`. Consultar eventos PUBLICADO con local/artista y categorías del evento; filtros por nombre, artista y tipo mediante parámetros JDBC. Crear `dto/EventoResumenDTO.java` y `dto/EventoDetalleDTO.java` si la vista necesita datos unidos. No concatenar filtros del usuario en SQL. Evento borrador/inexistente no debe obtenerse cambiando el id en la dirección.
 2. Crear `service/ServicioCatalogo.java`: validar id/filtros y coordinar consultas. Una búsqueda vacía devuelve mensaje amigable. El cupo mostrado es informativo: la compra vuelve a verificarlo.
 3. Crear `controller/EventoServlet.java` para GET `/eventos` y `controller/DetalleEventoServlet.java` para GET `/eventos/detalle`. Pasar datos por atributos y hacer forward a `eventos/lista.jsp` y `eventos/detalle.jsp`. Usar JSTL y escapar texto con `c:out`; las JSP no contienen SQL.
-4. Formulario de detalle: eventoId, categoriaId, cantidad de 1 a 4 y CSRF; destino POST `/carrito/agregar` de Ethan. Pedir `Csrf.token(session)` antes de renderizar un formulario. Mostrar agotado sin permitir selección. Usar `assets/css/app.css` y `WEB-INF/fragments/` existentes.
+4. Formulario de detalle: eventoId, categoriaId, cantidad de 1 a 4 y CSRF; destino POST `/carrito/agregar` de Ethan. Pedir `Csrf.token(session)` antes de renderizar un formulario. Mostrar agotado sin permitir selección. Usar `assets/css/app.css` y `WEB-INF/views/common/` existentes.
 
 ## Dependencias y entrega pequeña
 
@@ -19,14 +19,18 @@ Puedes empezar inmediatamente con el SQL demo. Entrega primero DAO/servicio, des
 
 ## Pruebas y checklist
 
-- [ ] El SQL demo muestra solo el evento PUBLICADO; BORRADOR permanece oculto incluso por URL directa.
-- [ ] Filtros individual/combinados/vacíos y búsqueda sin resultados funcionan.
-- [ ] Un filtro con comillas no rompe SQL ni devuelve datos fuera del filtro.
-- [ ] Id inválido/inexistente da respuesta controlada; no muestra stack trace.
-- [ ] Precios y zonas pertenecen al evento consultado; agotados se distinguen.
-- [ ] Con ancho de 360 px se lee sin desplazamiento horizontal; comprobar también escritorio.
+- [x] El SQL demo muestra solo el evento PUBLICADO; BORRADOR permanece oculto incluso por URL directa.
+- [x] Filtros individual/combinados/vacíos y búsqueda sin resultados funcionan.
+- [x] Un filtro con comillas no rompe SQL ni devuelve datos fuera del filtro.
+- [x] Id inválido/inexistente da respuesta controlada; no muestra stack trace.
+- [x] Precios y zonas pertenecen al evento consultado; agotados se distinguen.
+- [x] Con ancho de 360 px se lee sin desplazamiento horizontal; comprobar también escritorio.
 - [ ] Agregar al carrito conserva los ids acordados; Ethan confirma la integración.
-- [ ] Crear `src/test/java/pe/edu/utp/eventope/CatalogoMySqlTest.java` para visibilidad y filtros sobre una base exclusiva de prueba.
-- [ ] Entregar capturas de cartelera/detalle y anotar navegador, fecha y datos de prueba para 3.8.
+- [x] Crear `src/test/java/pe/edu/utp/eventope/CatalogoMySqlTest.java` para visibilidad y filtros sobre una base exclusiva de prueba.
+- [x] Entregar capturas de cartelera/detalle y anotar navegador, fecha y datos de prueba para 3.8.
 
 Cambios propios: DAO/DTO/servicio/controladores/vistas de catálogo y pruebas. Para CSS compartido coordina con el integrador; no reemplaces el archivo de todos.
+
+## Estado de revisión — 12 de octubre de 2026
+
+Validación y dependencias pendientes en `../08_Daniel_Frank.md`. Las comprobaciones visuales corresponden a navegador con tamaño móvil emulado y escritorio. La entrega de capturas no sustituye las pruebas del recorrido completo de compra y QR.

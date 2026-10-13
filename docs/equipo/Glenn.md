@@ -17,16 +17,16 @@ La cámara debe probarse en HTTPS confiable para el teléfono. Si se usa entrada
 
 ## Pruebas y checklist
 
-- [ ] Usuario A no puede ver ni generar QR de boleto de B cambiando id.
-- [ ] QR cambia al pasar el intervalo y expira aunque falle la red.
-- [ ] Dos pestañas no duplican auditoría del mismo intervalo.
-- [ ] Captura antigua, OTP alterado, evento distinto y DNI incorrecto se deniegan.
-- [ ] QR vigente/identidad correcta permiten un acceso; siguiente escaneo se deniega.
-- [ ] Pérdida/reintento de la respuesta muestra “resultado recuperado”.
-- [ ] Guardia sin sesión, cuenta inactiva o dispositivo revocado no valida.
-- [ ] Permiso de cámara rechazado y cámara inexistente producen mensajes útiles.
-- [ ] Pantalla de cliente y panel funcionan en teléfono y computadora.
-- [ ] Ejecutar los tests existentes; añadir pruebas de permisos/respuestas HTTP al conectar los Servlets.
-- [ ] Guardar capturas boleto, permitido y denegado, con fecha/dispositivo para 3.8.
+- [x] Usuario A no puede ver ni generar QR de boleto de B cambiando id.
+- [x] QR cambia al pasar el intervalo y expira aunque falle la red.
+- [x] Dos pestañas no duplican auditoría del mismo intervalo.
+- [x] Captura antigua, OTP alterado, evento distinto y DNI incorrecto se deniegan.
+- [x] QR vigente/identidad correcta permiten un acceso; siguiente escaneo se deniega.
+- [x] Pérdida/reintento de la respuesta muestra “resultado recuperado”.
+- [x] Guardia sin sesión, cuenta inactiva o dispositivo revocado no valida.
+- [x] Permiso de cámara rechazado y cámara inexistente producen mensajes útiles.
+- [x] Pantalla de cliente y panel funcionan en teléfono y computadora.
+- [x] Ejecutar los tests existentes; añadir pruebas de permisos/respuestas HTTP al conectar los Servlets.
+- [ ] Guardar capturas boleto, permitido y denegado, con fecha/dispositivo para 3.8 (ejecutar en navegador/móvil).
 
 No reemplaces `Totp`, `CifradoSecretos`, `QrDAO`, `AccesoDAO`, `ServicioQr` o `ServicioAcceso` por implementaciones alternativas sin revisión. Reproducir cualquier problema con una prueba antes de modificar el núcleo compartido.

@@ -1,12 +1,23 @@
-target/
-config/*.local.properties
-*.log
-.idea/
-*.iml
+# Archivos generados por Maven
 /target/
+*.class
+*.war
 *.log
+
+# Configuración y credenciales propias de cada equipo
 config/*.local.properties
 .env
+.env.*
+!.env.example
+*.p12
+*.jks
+
+# Configuración local del editor
 .idea/
 *.iml
 .DS_Store
+Thumbs.db
+
+# Copias recibidas y paquetes de entrega
+EventoPe-Ethan-Implementado/
+*.zip

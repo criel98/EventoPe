@@ -13,7 +13,7 @@ Los compañeros trabajan en sus archivos; cada pequeña entrega se integra antes
 ## Ensayo de la demostración
 
 1. Preparar MySQL, servidor HTTPS, cuenta de cliente y cuenta de guardia. Verificar reloj del servidor y cámara del teléfono. Usar solo datos ficticios.
-2. Cliente: abrir cartelera, elegir evento y zona, indicar cantidad, nominar a cada asistente, confirmar pago simulado y abrir “Mis entradas”. La compra debe hacerse por la interfaz; la compra del SQL sirve solo de apoyo al desarrollo.
+2. Cliente: abrir cartelera, elegir Rock Fest (evento 10, asignado al guardia demo) y zona, indicar cantidad, nominar a cada asistente, confirmar pago simulado y abrir “Mis entradas”. La compra debe hacerse por la interfaz; la compra del SQL sirve solo de apoyo al desarrollo.
 3. Cliente: abrir boleto en teléfono y observar el cambio de QR al terminar el intervalo.
 4. Guardia: iniciar sesión, abrir su único panel, escanear QR vigente y escribir el DNI presentado. Mostrar PERMITIDO y estado UTILIZADA en la BD.
 5. Escanear de nuevo esa entrada: DENEGADO por uso anterior.

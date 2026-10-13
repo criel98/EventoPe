@@ -1,0 +1,60 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Revisión de compra | EventoPe</title>
+    <link rel="stylesheet" href="<c:url value='/assets/css/app.css'/>">
+    <link rel="stylesheet" href="<c:url value='/assets/css/style.css'/>">
+</head>
+<body>
+<%@ include file="/WEB-INF/views/common/cabecera.jspf" %>
+<main class="contenedor">
+    <h1>Identificación de asistentes</h1>
+    <p>Evento: <strong><c:out value="${carrito.eventoNombre}"/></strong>. Registra un asistente por cada entrada.</p>
+
+    <c:if test="${not empty error}">
+        <p class="error alerta" role="alert"><c:out value="${error}"/></p>
+    </c:if>
+
+    <form method="post" action="<c:url value='/compras/nominacion'/>" class="formulario">
+        <input type="hidden" name="csrf" value="${csrf}"/>
+        <c:forEach begin="0" end="${carrito.cantidadTotal - 1}" var="i">
+            <fieldset class="tarjeta">
+                <legend><strong>Asistente <c:out value="${i + 1}"/></strong></legend>
+                <label for="dni_${i}">DNI (8 dígitos)</label>
+                <input id="dni_${i}" name="dni_${i}" inputmode="numeric" pattern="[0-9]{8}" minlength="8" maxlength="8" required
+                       value="${fn:escapeXml(carrito.nominaciones.size() > i ? carrito.nominaciones[i].dni : '')}"/>
+
+                <label for="nombres_${i}">Nombres</label>
+                <input id="nombres_${i}" name="nombres_${i}" maxlength="100" required
+                       value="${fn:escapeXml(carrito.nominaciones.size() > i ? carrito.nominaciones[i].nombres : '')}"/>
+
+                <label for="apellidos_${i}">Apellidos</label>
+                <input id="apellidos_${i}" name="apellidos_${i}" maxlength="100" required
+                       value="${fn:escapeXml(carrito.nominaciones.size() > i ? carrito.nominaciones[i].apellidos : '')}"/>
+            </fieldset>
+        </c:forEach>
+        <button type="submit">Guardar asistentes</button>
+    </form>
+
+    <section class="tarjeta">
+        <h2>Pago simulado</h2>
+        <p><strong>Importe de la selección: S/ <c:out value="${carrito.subtotal}"/></strong> por <c:out value="${carrito.cantidadTotal}"/> entrada(s).</p>
+        <p>Esta entrega académica no procesa tarjetas reales ni solicita sus números. El importe definitivo se calcula con los precios guardados en la base de datos.</p>
+        <p>Antes de confirmar, guarda los datos de todos los asistentes.</p>
+        <form method="post" action="<c:url value='/compras/confirmar'/>" class="formulario">
+            <input type="hidden" name="csrf" value="${csrf}"/>
+            <button type="submit" <c:if test="${carrito.nominaciones.size() ne carrito.cantidadTotal}">disabled</c:if>>
+                Confirmar compra
+            </button>
+        </form>
+    </section>
+
+    <p><a href="<c:url value='/carrito'/>">Revisar selección</a></p>
+</main>
+</body>
+</html>

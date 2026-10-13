@@ -27,8 +27,7 @@ public final class EventoDAO {
 
         List<Object> params = new ArrayList<>();
         if (nombre != null && !nombre.isBlank()) {
-            sql.append("AND (e.nombre LIKE ? OR a.nombre_artistico LIKE ?) ");
-            params.add("%" + nombre.trim() + "%");
+            sql.append("AND e.nombre LIKE ? ");
             params.add("%" + nombre.trim() + "%");
         }
         if (artista != null && !artista.isBlank()) {

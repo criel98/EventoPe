@@ -46,12 +46,13 @@ public final class DetalleEventoServlet extends HttpServlet {
         try {
             EventoDetalleDTO evento = servicio.detalle(id);
             req.setAttribute("evento", evento);
+            req.setAttribute("hayCupo",evento.getCategorias().stream().anyMatch(c->c.getAforoDisponible()>0));
             req.setAttribute("csrf", Csrf.token(req.getSession()));
             req.getRequestDispatcher("/WEB-INF/views/eventos/detalle.jsp").forward(req, resp);
         } catch (IllegalArgumentException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Evento no encontrado");
         } catch (SQLException e) {
-            throw new ServletException("No se pudo consultar el detalle del evento", e);
+            resp.sendError(503,"El evento no está disponible temporalmente.");
         }
     }
 }

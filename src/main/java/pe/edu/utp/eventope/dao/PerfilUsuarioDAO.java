@@ -52,4 +52,9 @@ public class PerfilUsuarioDAO {
         }
         return Optional.empty();
     }
+    public void actualizar(Connection c, PerfilUsuario perfil) throws SQLException {
+        try(var p=c.prepareStatement("INSERT INTO perfil_usuario(cliente_id,fecha_registro,estado_verificacion,pais,fecha_nacimiento) VALUES (?,UTC_TIMESTAMP(),false,?,?) ON DUPLICATE KEY UPDATE pais=VALUES(pais),fecha_nacimiento=VALUES(fecha_nacimiento)")) {
+            p.setInt(1,perfil.getClienteId());p.setString(2,perfil.getPais());p.setDate(3,perfil.getFechaNacimiento()==null?null:Date.valueOf(perfil.getFechaNacimiento()));p.executeUpdate();
+        }
+    }
 }

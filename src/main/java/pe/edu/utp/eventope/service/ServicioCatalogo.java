@@ -42,6 +42,7 @@ public final class ServicioCatalogo {
             return null;
         }
         String nueva = valor.trim();
+        if(nueva.length()>150)throw new IllegalArgumentException("Los filtros admiten hasta 150 caracteres.");
         return nueva.isEmpty() ? null : nueva;
     }
 }

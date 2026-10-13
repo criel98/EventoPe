@@ -28,6 +28,7 @@ public final class EventoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        pe.edu.utp.eventope.util.Csrf.token(req.getSession());
         String nombre = req.getParameter("nombre");
         String artista = req.getParameter("artista");
         String tipo = req.getParameter("tipo");
@@ -41,8 +42,10 @@ public final class EventoServlet extends HttpServlet {
             if (eventos.isEmpty()) {
                 req.setAttribute("mensaje", "No hay eventos con esos filtros en este momento.");
             }
+        } catch (IllegalArgumentException e) {
+            resp.setStatus(400); req.setAttribute("mensaje",e.getMessage());
         } catch (SQLException e) {
-            throw new ServletException("No se pudo consultar el catálogo", e);
+            resp.setStatus(503); req.setAttribute("mensaje","El catálogo no está disponible temporalmente. Inténtalo nuevamente.");
         }
 
         req.getRequestDispatcher("/WEB-INF/views/eventos/lista.jsp").forward(req, resp);

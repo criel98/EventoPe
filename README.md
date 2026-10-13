@@ -37,24 +37,28 @@ mvn clean verify
 
 Las pruebas de integración eliminan y reconstruyen fixtures SOLO en ese esquema. Nunca poner el nombre de la base demo ni de una base con datos reales. La clave maestra usada en esas pruebas es aleatoria y exclusiva de la prueba. No hace falta copiarla a configuración.
 
-Resultados registrados: `docs/06_Verificacion.md`. Las pruebas del proyecto final de compra y navegador se añadirán por el equipo.
+Resultados registrados: `docs/06_Verificacion.md`. El recorrido cliente → compra → QR → seguridad también se comprobó en navegador con datos ficticios.
+
+## Pruebas de catálogo y cuentas
+
+`CatalogoMySqlTest` y `CuentaMySqlTest` usan las mismas variables `EVENTOPE_TEST_DB_*` y el esquema exclusivo `eventope_base_test`. Comprueban visibilidad, filtros, registro, duplicados, concurrencia, rollback, edición propia y roles. No requieren un archivo de configuración de desarrollo. Los resultados del alcance se documentan en `docs/08_Daniel_Frank.md`.
 
 ## Despliegue
 
-El paquete es `target/EventoPe.war`. Desplegarlo en Tomcat 10.1. El único endpoint ya existente es `/EventoPe/salud`: comprueba despliegue HTTP, no conexión de BD ni una compra. Las rutas de cliente y seguridad se implementarán según las fichas.
+El paquete es `target/EventoPe.war`. Desplegarlo en Tomcat 10.1. Rutas disponibles: `/EventoPe/eventos`, `/EventoPe/eventos/detalle?id=10`, `/EventoPe/registro`, `/EventoPe/login`, `/EventoPe/cuenta/perfil` y `/EventoPe/personal/login`. `/EventoPe/salud` verifica despliegue HTTP. La compra, mis entradas, el boleto TOTP y el panel de validación están conectados. La selección es un paso interno de compra, sin carrito en el menú.
 
 `WEB-INF/web.xml` marca la cookie de sesión como Secure: el entorno debe servir HTTPS para probar login. No desactivar esta protección para la demostración desde móviles. La cámara de un teléfono también debe probarse bajo HTTPS con certificado confiable por ese teléfono. Tener una dirección HTTP en la red local no garantiza acceso a cámara.
 
-Las pruebas de despliegue en Tomcat y de cámara están pendientes. El empaquetado del WAR verifica la construcción del proyecto, pero no acredita el funcionamiento completo de la interfaz.
+El catálogo y las cuentas se comprobaron en Tomcat 10.1 con HTTPS local. Se verificó el recorrido de compra/validación y lectura mediante vídeo de prueba. Falta el ensayo de cámara física en teléfono. Ver `docs/08_Daniel_Frank.md`.
 
 ## Credenciales ficticias incluidas
 
 - Cliente A: `cliente.a@example.invalid`, contraseña `ClienteDemo2026!`, DNI `10000001`.
 - Cliente B: `cliente.b@example.invalid`, misma contraseña demo, DNI `10000002`.
 - Guardia: usuario `guardia.demo`, contraseña `GuardiaDemo2026!`.
-- Dispositivo demo: id 1, operador 1, evento 1, puerta Norte. Credencial ficticia de enrolamiento `DispositivoDemo2026-solo-local`. Su hash, no su valor, está en SQL. La credencial se resuelve en el servidor mediante configuración y asignación de sesión; no se incorpora a JavaScript público.
+- Dispositivo demo: id 1, operador 1, evento 10 (Rock Fest), puerta Norte. Credencial ficticia de enrolamiento `DispositivoDemo2026-solo-local`. Su hash, no su valor, está en SQL. La credencial se resuelve en el servidor mediante configuración y asignación de sesión; no se incorpora a JavaScript público.
 
-Son accesos públicos de prueba. No son cuentas de una aplicación desplegada ni contraseñas reales. El login aún se debe implementar. Los datos incluyen una compra y una entrada de demostración para desarrollar el boleto de forma independiente del checkout. Estos datos no acreditan una compra realizada mediante la interfaz.
+Son accesos públicos de prueba. No son cuentas de una aplicación desplegada ni contraseñas reales. El login de clientes y del personal de validación está implementado. Los datos incluyen una compra y una entrada de demostración para desarrollar el boleto de forma independiente del checkout. Estos datos no acreditan una compra realizada mediante la interfaz.
 
 ## Fuentes técnicas
 
@@ -64,3 +68,14 @@ Son accesos públicos de prueba. No son cuentas de una aplicación desplegada ni
 - JSTL: https://jakarta.ee/specifications/tags/3.0/
 
 El código propio de TOTP está contrastado con los 18 vectores SHA1/SHA256/SHA512 del RFC; EventoPe fija SHA256, ocho dígitos y 30 segundos. No constituye una auditoría de seguridad de producción.
+
+
+## Actualización de cartelera y ensayo de Semana 10
+
+En instalaciones que ya importaron los datos anteriores, ejecutar únicamente `sql/04_cartelera_demo.sql` en su base local. Oculta Concierto EventoPe y asigna el dispositivo ficticio al Rock Fest (10), conservando las compras previas. No volver a importar el esquema ni regenerar la clave maestra.
+
+Para el ensayo, registrar un cliente y comprar una entrada del Rock Fest. Abrir su boleto en el teléfono del cliente. En otro dispositivo iniciar sesión con `guardia.demo` / `GuardiaDemo2026!`, escribir el DNI del asistente y activar la cámara. El primer ingreso debe permitirse y el segundo denegarse. Servir HTTPS con certificado confiable para ambos dispositivos.
+
+El recordatorio de credenciales debajo del acceso de seguridad se controla con `demo.mostrarCredenciales=true` en la configuración externa; dejar `false` al terminar la demostración. `seguridad.dispositivoToken.1` debe contener la credencial del dispositivo ficticio indicada en el ejemplo. No publicar configuración privada.
+
+`assets/vendor/qrcode.min.js` es la distribución oficial de QRCode.js, bajo licencia MIT conservada en `LICENSE-qrcodejs.txt`. Fuente: https://github.com/davidshimjs/qrcodejs . SHA-256 de la copia: c541ef06327885a8415bca8df6071e14189b4855336def4f36db54bde8484f36.

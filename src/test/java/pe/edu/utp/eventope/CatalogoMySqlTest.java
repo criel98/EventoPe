@@ -26,16 +26,8 @@ class CatalogoMySqlTest {
         servicio = new ServicioCatalogo(conexiones);
 
         try (Connection c = conexiones.abrir(); Statement s = c.createStatement()) {
-            String[] tablas = {
-                    "detalle_transaccion", "metodo_pago", "comprobante_pago", "boleto_nominado",
-                    "ticket_qr_dinamico", "historial_rotacion_qr", "entrada_digital", "control_acceso_puerta",
-                    "dispositivo_validacion", "transaccion_compra", "politica_devolucion", "categoria_asiento",
-                    "preferencias_musicales", "perfil_usuario", "evento_cultural", "cupon_descuento",
-                    "administrador_plataforma", "usuario_cliente", "artista", "local_concierto", "organizador_evento"
-            };
-            for (String tabla : tablas) {
-                s.executeUpdate("DELETE FROM " + tabla);
-            }
+            if(!"eventope_base_test".equals(c.getCatalog()))throw new IllegalStateException("Solo se admite eventope_base_test");
+            DatosPrueba.limpiar();
 
             s.executeUpdate("INSERT INTO organizador_evento(id, ruc, razon_social, email_contacto) VALUES (1, '20000000001', 'Demo', 'demo@example.invalid')");
             s.executeUpdate("INSERT INTO local_concierto(id, nombre_local, direccion, capacidad_max, ciudad) VALUES (1, 'Movistar Arena', 'Av. Demo 123', 2000, 'Lima')");
@@ -67,5 +59,19 @@ class CatalogoMySqlTest {
         var evento = servicio.detalle(1);
         assertNotNull(evento);
         assertEquals(2, evento.getCategorias().size());
+    }
+
+    @Test void ocultaBorradorEInexistente() throws Exception {
+        assertThrows(IllegalArgumentException.class,()->servicio.detalle(2));assertThrows(IllegalArgumentException.class,()->servicio.detalle(999));assertThrows(IllegalArgumentException.class,()->servicio.detalle(-1));
+    }
+    @Test void filtrosIndividualesYCombinados() throws Exception {
+        assertEquals(1,servicio.buscar("Festival",null,null).size());assertEquals(1,servicio.buscar(null,"Primos",null).size());assertEquals(1,servicio.buscar(null,null,"festival").size());assertEquals(1,servicio.buscar("Festival","Primos","FESTIVAL").size());assertTrue(servicio.buscar("Festival","Otro",null).isEmpty());assertEquals(1,servicio.buscar("  ","",null).size());
+    }
+    @Test void filtrosLargosYComillas() throws Exception {
+        assertThrows(IllegalArgumentException.class,()->servicio.buscar("x".repeat(151),null,null));assertTrue(servicio.buscar("' OR 1=1 --",null,null).isEmpty());
+    }
+    @Test void zonasPertenecenAlEventoYConservanAgotado() throws Exception {
+        DatosPrueba.sql("UPDATE categoria_asiento SET aforo_disponible=0 WHERE id=1");
+        var detalle=servicio.detalle(1);assertTrue(detalle.getCategorias().stream().allMatch(c->c.getEventoId()==1));assertEquals(0,detalle.getCategorias().stream().filter(c->c.getId()==1).findFirst().orElseThrow().getAforoDisponible());
     }
 }

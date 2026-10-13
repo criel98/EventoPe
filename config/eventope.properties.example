@@ -5,3 +5,9 @@ db.user=REEMPLAZAR
 db.password=REEMPLAZAR
 # Base64 de 32 bytes aleatorios. Generar con GenerarClaveMaestra, no reutilizar claves de pruebas.
 totp.masterKey=REEMPLAZAR
+
+# Recordatorio temporal de la cuenta ficticia de seguridad.
+demo.mostrarCredenciales=false
+
+# Solo para el dispositivo ficticio creado por 02_datos_demo.sql.
+seguridad.dispositivoToken.1=DispositivoDemo2026-solo-local
