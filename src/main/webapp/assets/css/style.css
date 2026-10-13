@@ -1,0 +1,132 @@
+/* ==========================================================================
+   EventoPe - Barra de Búsqueda Flotante Teleticket
+   ========================================================================== */
+
+.search-bar-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    background: #ffffff;
+    padding: 12px 18px;
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 28px;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.search-bar-container:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 14px 30px -5px rgba(99, 102, 241, 0.15);
+}
+
+.search-field-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 140px;
+}
+
+.search-field-group.main-search {
+    flex: 2;
+    min-width: 220px;
+}
+
+.search-field-group.with-divider {
+    border-left: 1px solid #f1f5f9;
+    padding-left: 14px;
+}
+
+.search-label {
+    font-size: 0.76rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+
+.search-input, .search-select {
+    border: none;
+    background: transparent;
+    min-height: 38px;
+    margin: 0;
+    padding: 6px 4px;
+    border-radius: 6px;
+    width: 100%;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    box-shadow: none;
+}
+
+.search-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.search-input:focus, .search-select:focus {
+    box-shadow: none;
+    outline: none;
+    background: rgba(238, 242, 255, 0.4);
+}
+
+.search-select {
+    cursor: pointer;
+}
+
+.search-button-circular {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    min-height: 48px;
+    margin: 0;
+    flex-shrink: 0;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.search-button-circular:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
+}
+
+.search-button-circular:active {
+    transform: scale(0.96);
+}
+
+@media(max-width: 768px) {
+    .search-bar-container {
+        border-radius: 20px;
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .search-field-group, .search-field-group.main-search {
+        min-width: 0;
+        flex-basis: 100%;
+    }
+
+    .search-field-group.with-divider {
+        border-left: 0;
+        border-top: 1px solid #f1f5f9;
+        padding-left: 0;
+        padding-top: 8px;
+    }
+
+    .search-button-circular {
+        width: 100%;
+        border-radius: 14px;
+        min-height: 48px;
+        margin-top: 6px;
+    }
+}

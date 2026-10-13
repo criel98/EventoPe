@@ -22,7 +22,16 @@
   <filter><filter-name>sesion</filter-name><filter-class>pe.edu.utp.eventope.filter.SesionFilter</filter-class></filter>
   <filter><filter-name>csrf</filter-name><filter-class>pe.edu.utp.eventope.filter.CsrfFilter</filter-class></filter>
   <filter-mapping><filter-name>utf8</filter-name><url-pattern>/*</url-pattern></filter-mapping>
-  <filter-mapping><filter-name>sesion</filter-name><url-pattern>/cuenta/*</url-pattern><url-pattern>/compras/*</url-pattern><url-pattern>/entradas/*</url-pattern><url-pattern>/seguridad/*</url-pattern></filter-mapping>
+  <filter-mapping><filter-name>sesion</filter-name><url-pattern>/cuenta/*</url-pattern><url-pattern>/perfil</url-pattern><url-pattern>/compras/*</url-pattern><url-pattern>/entradas</url-pattern><url-pattern>/entradas/*</url-pattern><url-pattern>/seguridad</url-pattern><url-pattern>/seguridad/*</url-pattern></filter-mapping>
   <filter-mapping><filter-name>csrf</filter-name><url-pattern>/*</url-pattern></filter-mapping>
-  <session-config><session-timeout>20</session-timeout><cookie-config><http-only>true</http-only><secure>true</secure></cookie-config><tracking-mode>COOKIE</tracking-mode></session-config>
+  <session-config><session-timeout>20</session-timeout><cookie-config><http-only>true</http-only><secure>false</secure></cookie-config><tracking-mode>COOKIE</tracking-mode></session-config>
+
+  <welcome-file-list><welcome-file>eventos</welcome-file></welcome-file-list>
+  <error-page><error-code>400</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
+  <error-page><error-code>401</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
+  <error-page><error-code>403</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
+  <error-page><error-code>404</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
+  <error-page><error-code>405</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
+  <error-page><error-code>500</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
+  <error-page><error-code>503</error-code><location>/WEB-INF/views/common/error.jsp</location></error-page>
 </web-app>

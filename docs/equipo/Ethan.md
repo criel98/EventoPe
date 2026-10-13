@@ -15,16 +15,16 @@ Puedes crear y probar el servicio con SQL demo sin esperar pantallas. Recibes el
 
 ## Pruebas y checklist
 
-- [ ] Compra de dos entradas crea 1 compra, 2 entradas/detalles/nominaciones, 1 pago y 1 comprobante.
-- [ ] Stock disminuye exactamente dos; la suma coincide con precios de BD.
-- [ ] Cambiar precio/total/cantidad/cliente en el formulario no altera reglas.
-- [ ] Categoría de otro evento, evento no publicado y DNI inválido se rechazan.
-- [ ] Compra rechazada o fallo intermedio no deja filas parciales ni descuenta cupo.
-- [ ] Doble clic/reintento con la misma clave produce una sola compra.
-- [ ] Dos clientes compitiendo por el último cupo no compran ambos.
-- [ ] Dos sesiones del mismo cliente no superan el límite de cuatro.
-- [ ] Confirmación ajena no es accesible cambiando id en URL.
-- [ ] Crear `CompraMySqlTest.java` bajo `src/test/java/pe/edu/utp/eventope/` para atomicidad, reintentos y concurrencia en BD exclusiva.
-- [ ] Recorrido usable en móvil y escritorio; capturas de nominación, revisión y confirmación para 3.8.
+- [x] Compra de dos entradas crea 1 compra, 2 entradas/detalles/nominaciones, 1 pago y 1 comprobante.
+- [x] Stock disminuye exactamente dos; la suma coincide con precios de BD.
+- [x] Cambiar precio/total/cantidad/cliente en el formulario no altera reglas.
+- [x] Categoría de otro evento, evento no publicado y DNI inválido se rechazan.
+- [x] Compra rechazada o fallo intermedio no deja filas parciales ni descuenta cupo.
+- [x] Doble clic/reintento con la misma clave produce una sola compra.
+- [x] Dos clientes compitiendo por el último cupo no compran ambos.
+- [x] Dos sesiones del mismo cliente no superan el límite de cuatro.
+- [x] Confirmación ajena no es accesible cambiando id en URL.
+- [x] Crear `CompraMySqlTest.java` bajo `src/test/java/pe/edu/utp/eventope/` para atomicidad, reintentos y concurrencia en BD exclusiva.
+- [x] Recorrido usable en móvil y escritorio; capturas de nominación, revisión y confirmación para 3.8.
 
 Divide las entregas en carrito, servicio probado y pantallas conectadas. No entregues primero una página que simule éxito sin guardar la compra.

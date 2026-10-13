@@ -12,7 +12,7 @@ La central, los perfiles del personal, la mensajería y los paneles administrati
 
 ## Estado de implementación
 
-La base común contiene 25 clases del dominio, esquema SQL, configuración JDBC, controles de sesión y formularios, servicios TOTP y de validación, pruebas automatizadas y estilos compartidos. La interfaz completa, la autenticación y la compra se encuentran pendientes de desarrollo e integración. Los resultados y límites de las pruebas se detallan en `docs/06_Verificacion.md`.
+La base común contiene 25 clases del dominio, esquema SQL, configuración JDBC, controles de sesión y formularios, servicios TOTP y de validación, pruebas automatizadas y estilos compartidos. El catálogo, el registro, la autenticación y la edición de cuenta están implementados y probados. La selección, la compra simulada, las nominaciones, los boletos TOTP y el panel de validación están integrados. Se comprobó el flujo en navegador con datos ficticios; el ensayo con cámara física en teléfono sigue pendiente. Ver `docs/08_Daniel_Frank.md`. Los resultados y límites de las pruebas se detallan en `docs/06_Verificacion.md`.
 
 ## Responsabilidades
 

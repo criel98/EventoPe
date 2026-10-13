@@ -1,0 +1,59 @@
+package pe.edu.utp.eventope.dto;
+
+import java.io.Serializable;
+import java.util.*;
+
+public final class CarritoCompra implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private final int eventoId;
+    private final String eventoNombre;
+    private final List<LineaCarrito> lineas;
+    private List<NominacionAsistente> nominaciones = new ArrayList<>();
+    private String claveConfirmacion;
+
+    public CarritoCompra(int eventoId, String eventoNombre, List<LineaCarrito> lineas) {
+        if (eventoId <= 0 || lineas == null || lineas.isEmpty()) {
+            throw new IllegalArgumentException("Carrito inválido");
+        }
+        this.eventoId = eventoId;
+        this.eventoNombre = eventoNombre;
+        this.lineas = new ArrayList<>(lineas);
+    }
+
+    public int getEventoId() { return eventoId; }
+    public String getEventoNombre() { return eventoNombre; }
+    public List<LineaCarrito> getLineas() { return Collections.unmodifiableList(lineas); }
+    public int getCantidadTotal() { return lineas.stream().mapToInt(LineaCarrito::getCantidad).sum(); }
+    /** Resumen de precios recibidos desde BD; al confirmar se vuelve a consultar su valor vigente. */
+    public java.math.BigDecimal getSubtotal() {
+        return lineas.stream().map(l -> new java.math.BigDecimal(l.getPrecioUnitario())
+                .multiply(java.math.BigDecimal.valueOf(l.getCantidad())))
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add).setScale(2);
+    }
+    public List<NominacionAsistente> getNominaciones() { return Collections.unmodifiableList(nominaciones); }
+    public void setNominaciones(List<NominacionAsistente> n) { nominaciones = new ArrayList<>(n); }
+    public String getClaveConfirmacion() { return claveConfirmacion; }
+    public void asegurarClave() { if (claveConfirmacion == null) claveConfirmacion = UUID.randomUUID().toString(); }
+
+    public void agregar(LineaCarrito linea) {
+        for (int i = 0; i < lineas.size(); i++) {
+            if (lineas.get(i).getCategoriaId() == linea.getCategoriaId()) {
+                LineaCarrito old = lineas.get(i);
+                int n = old.getCantidad() + linea.getCantidad();
+                if (getCantidadTotal() - old.getCantidad() + n > 4) {
+                    throw new IllegalArgumentException("Máximo cuatro entradas por compra.");
+                }
+                lineas.set(i, new LineaCarrito(old.getCategoriaId(), old.getZona(), n, old.getPrecioUnitario()));
+                nominaciones.clear();
+                claveConfirmacion = null;
+                return;
+            }
+        }
+        if (getCantidadTotal() + linea.getCantidad() > 4) {
+            throw new IllegalArgumentException("Máximo cuatro entradas por compra.");
+        }
+        lineas.add(linea);
+        nominaciones.clear();
+        claveConfirmacion = null;
+    }
+}

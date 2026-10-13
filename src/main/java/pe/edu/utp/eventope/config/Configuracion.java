@@ -21,4 +21,9 @@ public final class Configuracion {
         if (valor == null || valor.isBlank() || valor.equals("REEMPLAZAR")) throw new IllegalStateException("Falta configurar " + clave);
         return valor;
     }
+    public java.util.Optional<String> opcional(String clave) {
+        String valor = datos.getProperty(clave);
+        if (valor == null || valor.isBlank() || valor.equals("REEMPLAZAR")) return java.util.Optional.empty();
+        return java.util.Optional.of(valor);
+    }
 }

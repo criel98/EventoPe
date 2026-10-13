@@ -41,4 +41,9 @@ public class PreferenciasDAO {
         }
         return Optional.empty();
     }
+    public void actualizar(Connection c, PreferenciasMusicales pref) throws SQLException {
+        try(var p=c.prepareStatement("INSERT INTO preferencias_musicales(cliente_id,genero_favorito,artista_favorito) VALUES (?,?,?) ON DUPLICATE KEY UPDATE genero_favorito=VALUES(genero_favorito),artista_favorito=VALUES(artista_favorito)")) {
+            p.setInt(1,pref.getClienteId());p.setString(2,pref.getGeneroFavorito());p.setString(3,pref.getArtistaFavorito());p.executeUpdate();
+        }
+    }
 }

@@ -22,7 +22,7 @@ La sesión HTTP guarda un objeto `SesionUsuario` bajo el nombre `sesionUsuario`.
 | Frank | POST `/logout` | Salir, con CSRF |
 | Frank | GET/POST `/personal/login` | Acceso mínimo del guardia; no perfil ni panel central |
 | Frank | GET/POST `/cuenta/perfil` | Datos propios |
-| Ethan | GET `/compras/carrito`; POST `/compras/carrito` | Carrito de un evento; zona y cantidad |
+| Ethan | GET `/carrito`; POST `/carrito/agregar` | Carrito de un evento; zona y cantidad |
 | Ethan | GET/POST `/compras/nominacion` | Un asistente por boleto |
 | Ethan | GET `/compras/revision`; POST `/compras/confirmar` | Pago simulado y compra atómica |
 | Ethan | GET `/compras/confirmacion?id=...` | Compra/comprobante propio |

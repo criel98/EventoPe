@@ -80,4 +80,10 @@ public final class UsuarioClienteDAO {
         }
         return java.util.Optional.empty();
     }
+    public void actualizar(Connection c, UsuarioCliente u) throws SQLException {
+        try(var p=c.prepareStatement("UPDATE usuario_cliente SET nombres=?,apellidos=?,dni=?,email=?,telefono=? WHERE id=? AND estado='ACTIVO'")) {
+            p.setString(1,u.getNombres());p.setString(2,u.getApellidos());p.setString(3,u.getDni());p.setString(4,u.getEmail());p.setString(5,u.getTelefono());p.setInt(6,u.getId());
+            p.executeUpdate();
+        }
+    }
 }

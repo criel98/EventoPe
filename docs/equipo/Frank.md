@@ -17,15 +17,19 @@ Los filtros requieren HTTPS para que el navegador envíe su cookie Secure. Coord
 
 ## Pruebas y checklist
 
-- [ ] Registro válido crea cliente, perfil y preferencias; un fallo revierte todo.
-- [ ] Email/DNI repetidos e intentos simultáneos no crean duplicados.
-- [ ] Contraseña incorrecta o cuenta inactiva no abre sesión.
-- [ ] Cambia el id de sesión al entrar y desaparece al salir.
-- [ ] Cliente no entra a seguridad y guardia no entra a cuenta/compras del cliente.
-- [ ] Modificar id/rol oculto o URL no permite editar otra cuenta.
-- [ ] POST sin CSRF se rechaza; formulario correcto funciona con acentos.
-- [ ] Pantallas legibles a 360 px y en escritorio; mensajes sin datos internos.
-- [ ] Crear pruebas de autenticación/registro en `src/test/java/pe/edu/utp/eventope/CuentaMySqlTest.java` con BD exclusiva.
-- [ ] Entregar capturas login/registro/perfil y comprobación de permisos para 3.8.
+- [x] Registro válido crea cliente, perfil y preferencias; un fallo revierte todo.
+- [x] Email/DNI repetidos e intentos simultáneos no crean duplicados.
+- [x] Contraseña incorrecta o cuenta inactiva no abre sesión.
+- [x] Cambia el id de sesión al entrar y desaparece al salir.
+- [x] Cliente no entra a seguridad y guardia no entra a cuenta/compras del cliente.
+- [x] Modificar id/rol oculto o URL no permite editar otra cuenta.
+- [x] POST sin CSRF se rechaza; formulario correcto funciona con acentos.
+- [x] Pantallas legibles a 360 px y en escritorio; mensajes sin datos internos.
+- [x] Crear pruebas de autenticación/registro en `src/test/java/pe/edu/utp/eventope/CuentaMySqlTest.java` con BD exclusiva.
+- [x] Entregar capturas login/registro/perfil y comprobación de permisos para 3.8.
 
 Nota: el historial de compras lo entrega Glenn dentro de “Mis entradas”, consultando las compras propias; acuerda un enlace desde la cuenta, sin duplicar esa consulta.
+
+## Estado de revisión — 12 de octubre de 2026
+
+Validación y dependencias pendientes en `../08_Daniel_Frank.md`. Las comprobaciones visuales corresponden a navegador con tamaño móvil emulado y escritorio. La entrega de capturas no sustituye las pruebas del recorrido completo de compra y QR.

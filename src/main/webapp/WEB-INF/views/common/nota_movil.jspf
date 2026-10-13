@@ -1,1 +1,9 @@
-<p class="nota-movil">Para presentar tu entrada, abre tu boleto desde el teléfono. También puedes comprar y consultar tus entradas desde una computadora.</p>
+<%@ page pageEncoding="UTF-8" %>
+<footer style="margin-top: 60px; padding-top: 24px; border-top: 1px solid #e2e8f0; text-align: center; color: #64748b; font-size: 0.88rem;">
+  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 12px; font-weight: 600;">
+    <span>&#128274; Cifrado y Seguridad Bancaria</span>
+    <span>&#9889; Boletos Digitales con QR Dinámico (TOTP)</span>
+    <span>&#128241; Optimizado para teléfonos móviles</span>
+  </div>
+  <p style="margin: 4px 0;">EventoPe &bull; Plataforma Oficial de Venta de Entradas y Control de Acceso &bull; 2026</p>
+</footer>
