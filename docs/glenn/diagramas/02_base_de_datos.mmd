@@ -1,0 +1,62 @@
+erDiagram
+  ADMINISTRADOR_PLATAFORMA ||--o{ DISPOSITIVO_VALIDACION : "operador_id"
+  EVENTO_CULTURAL ||--o{ DISPOSITIVO_VALIDACION : "evento_id"
+  DISPOSITIVO_VALIDACION ||--o{ CONTROL_ACCESO_PUERTA : "dispositivo_id"
+  ADMINISTRADOR_PLATAFORMA ||--o{ CONTROL_ACCESO_PUERTA : "operador_id"
+  ADMINISTRADOR_PLATAFORMA |o--o{ CONTROL_ACCESO_PUERTA : "autorizado_por_id"
+  ENTRADA_DIGITAL |o--o{ CONTROL_ACCESO_PUERTA : "entrada_id"
+  CONTROL_ACCESO_PUERTA ||--o{ INCIDENCIA_ACCESO : "control_id"
+  ADMINISTRADOR_PLATAFORMA |o--o{ INCIDENCIA_ACCESO : "resuelta_por_id"
+  USUARIO_CLIENTE ||--o{ NOTIFICACION_USUARIO : "cliente_id"
+  USUARIO_CLIENTE ||--o{ ENTRADA_DIGITAL : "comprador_id"
+  ENTRADA_DIGITAL ||--o| TICKET_QR_DINAMICO : "entrada_id"
+  TICKET_QR_DINAMICO ||--o{ HISTORIAL_ROTACION_QR : "qr_id"
+  DISPOSITIVO_VALIDACION {
+    int id PK
+    int operador_id FK
+    int evento_id FK
+    varchar nombre_puerta
+    varchar modelo_celular
+    char token_acceso_hash UK
+    varchar estado_dispositivo "ACTIVO|REVOCADO"
+  }
+  CONTROL_ACCESO_PUERTA {
+    int id PK
+    char solicitud_id UK
+    char solicitud_hash
+    int evento_id FK
+    int dispositivo_id FK
+    int operador_id FK
+    int entrada_id FK "nullable"
+    datetime hora_ingreso
+    varchar estado_acceso "PERMITIDO|DENEGADO"
+    varchar motivo
+    int autorizado_por_id FK "nullable"
+  }
+  INCIDENCIA_ACCESO {
+    int id PK
+    int control_id FK
+    varchar tipo_incidencia
+    text descripcion
+    varchar severidad "ALTA|MEDIA|BAJA"
+    varchar estado_resolucion "ABIERTA|RESUELTA|DESCARTADA"
+    int resuelta_por_id FK "nullable"
+    datetime fecha_resolucion "nullable"
+    varchar motivo_resolucion "nullable"
+  }
+  NOTIFICACION_USUARIO {
+    int id PK
+    int cliente_id FK
+    varchar titulo_mensaje "prefijo = tipo"
+    text contenido
+    datetime fecha_envio "UTC"
+    boolean leido
+  }
+  HISTORIAL_ROTACION_QR {
+    int id PK
+    int qr_id FK
+    bigint intervalo
+    datetime hora_generacion
+    char hash_anterior
+    char hash_nuevo
+  }

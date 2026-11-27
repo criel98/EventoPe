@@ -1,0 +1,30 @@
+flowchart LR
+  cli(["Cliente"])
+  gua(["Guardia<br/>(VALIDACION)"])
+  sop(["Soporte"])
+  adm(["Administrador"])
+  subgraph Sistema["EventoPe — Incidencias, acceso y notificaciones"]
+    direction TB
+    u1(["Ver mis notificaciones"])
+    u2(["Marcar notificación como leída"])
+    u3(["Validar entrada en puerta<br/>(QR + DNI)"])
+    u4(["Reintentar lectura<br/>(resultado recuperado)"])
+    u5(["Consultar incidencias"])
+    u6(["Resolver o descartar incidencia"])
+    u7(["Autorizar ingreso manual"])
+    u8(["Recibir aviso de compra,<br/>validación o seguridad"])
+  end
+  cli --> u1
+  cli --> u2
+  cli --> u8
+  gua --> u3
+  gua --> u4
+  sop --> u5
+  sop --> u6
+  adm --> u5
+  adm --> u6
+  adm --> u7
+  u3 -. "genera incidencia si deniega" .-> u5
+  u7 -. "exige incidencia abierta" .-> u6
+  u3 -. "&lt;&lt;include&gt;&gt;" .-> u8
+  u7 -. "&lt;&lt;include&gt;&gt;" .-> u8

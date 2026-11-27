@@ -1,0 +1,97 @@
+== Preparando base eventope_dev (esquema + datos demo + entradas de prueba) ==
+
+== 1. Sin sesión ==
+PASS  GET /notificaciones sin sesión redirige a /login
+PASS  GET /notificaciones/contador sin sesión responde 401
+PASS  GET /admin/incidencias sin sesión redirige a /personal/login
+PASS  POST resolver sin sesión es rechazado (401/403)
+PASS  POST ingreso-manual sin sesión es rechazado (401/403)
+
+== 2. Cliente A: sin acceso a administración ==
+PASS  login de cliente A
+PASS  cliente: GET /admin/incidencias responde 403
+PASS  cliente: GET /admin/incidencias/detalle responde 403
+PASS  cliente: POST ingreso-manual con CSRF válido responde 403
+PASS  cliente: contador inicial en 0
+PASS  cliente: bandeja vacía carga (200) con mensaje vacío
+
+== 3. Guardia (login real): sin acceso a bandeja de clientes ni a administración ==
+PASS  login real de guardia.demo
+PASS  guardia: GET /admin/incidencias responde 403
+PASS  guardia: POST resolver con CSRF válido responde 403
+PASS  guardia: bandeja de clientes redirige a /login
+
+== 4. Escenario de acceso (guardia real escanea, cliente real pide QR) ==
+PASS  cliente A obtiene QR de su entrada 201
+PASS  DNI incorrecto → denegado IDENTIDAD_NO_COINCIDE
+PASS  misma solicitud repetida → recuperado=true y mismo control
+PASS  DNI correcto y QR vigente → ingreso permitido (una vez)
+PASS  segundo escaneo → denegado YA_UTILIZADA
+PASS  cliente A obtiene QR de entrada 202
+      (esperando 8 s a que el QR de la 202 venza…)
+PASS  QR vencido → denegado QR_VENCIDO_O_FUERA_DE_INTERVALO
+PASS  QR alterado → denegado QR_ALTERADO
+
+== 5. Notificaciones: cada cliente solo ve las suyas ==
+PASS  login de cliente B
+PASS  B no recibió ninguna notificación
+PASS  A ve "Intento de ingreso rechazado" en su bandeja
+PASS  A ve "Entrada validada" en su bandeja
+PASS  la bandeja no muestra el DNI presentado ni el contenido del QR
+PASS  B no ve nada de A
+PASS  contador de A coincide con la base
+PASS  B no puede marcar una notificación de A (404)
+PASS  la notificación de A sigue sin leer
+PASS  POST sin CSRF es rechazado (403)
+PASS  A marca su notificación como leída (302)
+PASS  contador de A bajó en 1
+PASS  filtro "sin leer" carga
+PASS  marcar todas como leídas (302)
+PASS  A queda en 0 sin leer
+PASS  B no fue afectado ni tiene datos de A
+PASS  /assets/js/notificaciones.js se sirve
+PASS  la cabecera del cliente muestra el enlace de notificaciones
+
+== 6. Administrador: incidencias ==
+PASS  sesión local ADMIN
+PASS  lista de incidencias abiertas carga (200)
+PASS  la lista informa el total real de abiertas
+PASS  filtro por severidad ALTA muestra solo ALTA
+PASS  detalle de la incidencia por QR vencido (200)
+PASS  el detalle muestra el DNI solo enmascarado
+PASS  detalle inexistente responde 404
+PASS  detalle con id no numérico responde 404
+PASS  POST resolver sin CSRF responde 403
+PASS  motivo demasiado corto: se rechaza y se explica
+PASS  resolver guarda quién (admin.local=11) y estado
+PASS  resolver guarda cuándo
+PASS  resolver guarda por qué (texto completo)
+PASS  XSS: el motivo se muestra escapado, sin <script> activo
+PASS  el detalle cerrado muestra quién/cuándo/por qué
+PASS  resolver dos veces: se rechaza y no se sobrescribe
+
+== 7. Ingreso manual ==
+PASS  QR alterado: la pantalla NO ofrece ingreso manual
+PASS  QR alterado: el servidor rechaza el ingreso manual aunque se fuerce el POST
+PASS  justificación corta se rechaza y nada cambia
+PASS  sesión local SOPORTE
+PASS  soporte ve el detalle pero NO el formulario de ingreso manual
+PASS  soporte: POST ingreso-manual responde 403
+PASS  la entrada 202 sigue DISPONIBLE tras el intento de soporte
+PASS  ingreso manual autorizado: mensaje de éxito
+PASS  entrada 202 quedó UTILIZADA
+PASS  control PERMITIDO con autorizado_por_id=11 (quién autorizó)
+PASS  incidencia resuelta con la justificación
+PASS  segundo ingreso manual rechazado: no hay doble ingreso
+PASS  el cliente ya no puede pedir QR de la entrada utilizada
+PASS  A recibió el aviso de ingreso autorizado
+PASS  entrada anulada: la pantalla explica por qué no se puede recuperar
+PASS  entrada anulada: sigue ANULADA y sin ingreso
+
+== 8. Cuenta desactivada: la sesión abierta deja de servir ==
+PASS  soporte desactivado: la lista responde 403
+
+== 9. HTTPS (certificado autofirmado de desarrollo) ==
+PASS  HTTPS responde en 8443
+
+RESUMEN: 75 correctas, 0 con fallo, 75 comprobaciones. Fecha: 2026-11-27 06:03 (hora de Lima)

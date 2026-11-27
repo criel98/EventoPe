@@ -1,0 +1,23 @@
+sequenceDiagram
+  autonumber
+  actor A as Administrador
+  participant S as IncidenciasServlet
+  participant M as ServicioIngresoManual
+  participant DB as MySQL (1 transacción)
+  participant N as ServicioNotificaciones
+  A->>S: POST /admin/incidencias/ingreso-manual (id, justificación, csrf)
+  S->>S: sesión PERSONAL con rol ADMIN o SOPORTE (SOPORTE → 403 en el servicio)
+  S->>M: autorizar(actor, id, justificación)
+  M->>DB: ¿cuenta ACTIVA con nivel ADMIN?
+  M->>DB: SELECT incidencia FOR UPDATE (debe estar ABIERTA)
+  M->>DB: control DENEGADO, motivo recuperable, sin autorización previa
+  M->>DB: SELECT entrada FOR UPDATE (DISPONIBLE, mismo evento, sin ingreso previo)
+  M->>DB: UPDATE entrada → UTILIZADA
+  M->>DB: INSERT control PERMITIDO (autorizado_por_id = admin)
+  M->>DB: UPDATE incidencia → RESUELTA (quién, cuándo, por qué)
+  M->>N: notificarIngresoManual (savepoint)
+  N->>DB: INSERT notificación al dueño de la entrada
+  M->>DB: COMMIT
+  M-->>S: resultado
+  S-->>A: 302 → detalle con mensaje de éxito
+  Note over M,DB: Cualquier excepción antes del COMMIT revierte todo

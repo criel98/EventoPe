@@ -1,0 +1,92 @@
+classDiagram
+direction LR
+class DispositivoValidacion {
+  -int id
+  -int operadorId
+  -int eventoId
+  -String nombrePuerta
+  -String modeloCelular
+  -String tokenAccesoHash
+  -String estadoDispositivo
+}
+class ControlAccesoPuerta {
+  -int id
+  -String solicitudId
+  -String solicitudHash
+  -int eventoId
+  -int dispositivoId
+  -int operadorId
+  -Integer entradaId
+  -LocalDateTime horaIngreso
+  -String estadoAcceso
+  -String motivo
+  -Integer autorizadoPorId
+}
+class IncidenciaAcceso {
+  -int id
+  -int controlId
+  -String tipoIncidencia
+  -String descripcion
+  -String severidad
+  -String estadoResolucion
+  -Integer resueltaPorId
+  -LocalDateTime fechaResolucion
+  -String motivoResolucion
+}
+class NotificacionUsuario {
+  -int id
+  -int clienteId
+  -String tituloMensaje
+  -String contenido
+  -LocalDateTime fechaEnvio
+  -boolean leido
+}
+class HistorialRotacionQR {
+  -int id
+  -int qrId
+  -long intervalo
+  -LocalDateTime horaGeneracion
+  -String hashAnterior
+  -String hashNuevo
+}
+class TicketQRDinamico
+class EntradaDigital
+class UsuarioCliente
+class AdministradorPlataforma
+class EventoCultural
+class ServicioAcceso {
+  +validar()
+}
+class ServicioIncidencias {
+  +listar()
+  +detalle()
+  +resolver()
+}
+class ServicioIngresoManual {
+  +autorizar()
+}
+class ServicioNotificaciones {
+  +listar()
+  +marcarLeida()
+  +notificarCompra()
+  +notificarAcceso()
+}
+DispositivoValidacion "1" --> "*" ControlAccesoPuerta : registra
+ControlAccesoPuerta "1" --> "0..*" IncidenciaAcceso : origina
+ControlAccesoPuerta "*" --> "0..1" EntradaDigital : sobre
+TicketQRDinamico "1" --> "*" HistorialRotacionQR : audita
+EntradaDigital "1" --> "0..1" TicketQRDinamico : tiene
+UsuarioCliente "1" --> "*" NotificacionUsuario : recibe
+UsuarioCliente "1" --> "*" EntradaDigital : compra
+AdministradorPlataforma "1" --> "*" DispositivoValidacion : opera
+AdministradorPlataforma "0..1" --> "*" ControlAccesoPuerta : autoriza
+AdministradorPlataforma "0..1" --> "*" IncidenciaAcceso : resuelve
+EventoCultural "1" --> "*" DispositivoValidacion : asigna
+ServicioAcceso ..> ControlAccesoPuerta
+ServicioAcceso ..> IncidenciaAcceso
+ServicioAcceso ..> ServicioNotificaciones
+ServicioIncidencias ..> IncidenciaAcceso
+ServicioIngresoManual ..> ControlAccesoPuerta
+ServicioIngresoManual ..> IncidenciaAcceso
+ServicioIngresoManual ..> ServicioNotificaciones
+ServicioNotificaciones ..> NotificacionUsuario
