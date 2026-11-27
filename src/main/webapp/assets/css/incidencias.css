@@ -1,0 +1,32 @@
+/* Estilos del panel de incidencias y la bandeja de avisos; se apoyan en app.css. */
+.filtros-inc { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin: 12px 0; }
+.filtros-inc > div { min-width: 160px; flex: 1 1 160px; }
+.resumen-inc { color: #475569; margin: 8px 0 16px; }
+.lista-inc { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.inc { background: #ffffff; border: 1px solid #e2e8f0; border-left: 6px solid #94a3b8; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.inc.sev-ALTA { border-left-color: #b42318; }
+.inc.sev-MEDIA { border-left-color: #b54708; }
+.inc.sev-BAJA { border-left-color: #475569; }
+.inc h2 { font-size: 1.05rem; margin: 4px 0; }
+.inc-meta { margin: 2px 0; font-size: 0.9rem; color: #475569; }
+.inc .boton { margin-top: 8px; text-align: center; }
+.inc-cabecera { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.inc-num { margin-left: auto; font-weight: 700; color: #64748b; }
+.chip { display: inline-block; font-size: 0.75rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; background: #e2e8f0; color: #334155; }
+.chip.sev-ALTA { background: #fee2e2; color: #991b1b; }
+.chip.sev-MEDIA { background: #ffedd5; color: #9a3412; }
+.chip.sev-BAJA { background: #e2e8f0; color: #334155; }
+.chip.estado-ABIERTA { background: #fef3c7; color: #92400e; }
+.chip.estado-RESUELTA { background: #d1fae5; color: #065f46; }
+.chip.estado-DESCARTADA { background: #e2e8f0; color: #475569; }
+.paginacion { display: flex; gap: 8px; justify-content: center; margin: 16px 0; }
+.datos { display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 6px 12px; margin: 8px 0 0; }
+.datos dt { font-weight: 700; color: #475569; font-size: 0.9rem; }
+.datos dd { margin: 0; overflow-wrap: anywhere; }
+.registro-cierre { border-left: 6px solid #166438; }
+.ingreso-manual { border-left: 6px solid #b42318; }
+.aviso-manual { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 10px 12px; }
+textarea { width: 100%; max-width: 100%; font-size: 16px; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
+button.peligro { background: #b42318; }
+button.peligro:hover { background: #912018; }
+@media (max-width: 520px) { .datos { grid-template-columns: 1fr; } .datos dt { margin-top: 6px; } }

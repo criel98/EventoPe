@@ -1,0 +1,12 @@
+stateDiagram-v2
+  [*] --> ABIERTA: guardia deniega un ingreso
+  ABIERTA --> RESUELTA: ADMIN/SOPORTE resuelve (motivo obligatorio)
+  ABIERTA --> DESCARTADA: ADMIN/SOPORTE descarta (falsa alarma)
+  ABIERTA --> RESUELTA: ADMIN autoriza ingreso manual (justificación)
+  RESUELTA --> [*]
+  DESCARTADA --> [*]
+  note right of ABIERTA
+    Solo una incidencia ABIERTA puede cerrarse.
+    El cierre guarda quién, cuándo y por qué
+    y no se puede sobrescribir.
+  end note

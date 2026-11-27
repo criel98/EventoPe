@@ -34,6 +34,9 @@ public final class ServicioCompra {
             c.setAutoCommit(false);
             try {
                 CompraConfirmada r = dao.guardar(c, clienteId, carrito, hash);
+                // [Glenn] Notificación interna de compra. Misma transacción, protegida por savepoint (un fallo del aviso no anula la compra)
+                // e idempotente (repetir la confirmación no duplica el aviso).
+                ServicioNotificaciones.notificarCompra(c, clienteId, r.getEvento(), r.getComprobante() != null ? r.getComprobante() : r.getCodigo(), r.getCantidad(), r.getTotal());
                 c.commit();
                 return r;
             } catch (Exception e) {

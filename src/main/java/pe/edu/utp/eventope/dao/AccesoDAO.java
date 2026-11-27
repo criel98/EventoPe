@@ -33,6 +33,10 @@ public final class AccesoDAO {
         }
     }
     public void incidencia(Connection c,int control,String motivo)throws SQLException{
-        try(var p=c.prepareStatement("INSERT INTO incidencia_acceso(control_id,tipo_incidencia,descripcion,severidad,estado_resolucion) VALUES (?,?,?,'MEDIA','ABIERTA')")){p.setInt(1,control);p.setString(2,motivo);p.setString(3,"Intento denegado en demostración de acceso");p.executeUpdate();}
+        try(var p=c.prepareStatement("INSERT INTO incidencia_acceso(control_id,tipo_incidencia,descripcion,severidad,estado_resolucion) VALUES (?,?,?,?,'ABIERTA')")){
+            p.setInt(1,control);p.setString(2,motivo);
+            p.setString(3,"Intento denegado: "+pe.edu.utp.eventope.util.MotivosAcceso.descripcion(motivo)+".");
+            p.setString(4,pe.edu.utp.eventope.util.MotivosAcceso.severidad(motivo));p.executeUpdate();
+        }
     }
 }

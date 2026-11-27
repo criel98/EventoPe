@@ -10,11 +10,12 @@
   cancelAnimationFrame(frame); stream?.getTracks().forEach(t => t.stop()); stream = null;
   video.srcObject = null; $('btn-camara').textContent = 'Activar cámara';
  }
- function mostrar(titulo, texto, permitido, reintento) {
-  resultado.replaceChildren(); resultado.style.display = 'block'; resultado.setAttribute('role', 'status');
+ function mostrar(titulo, texto, permitido, reintento, recuperado) {
+  resultado.replaceChildren(); resultado.style.display = 'block'; resultado.setAttribute('role', recuperado ? 'alert' : 'status');
   const tarjeta = document.createElement('div'); tarjeta.className = 'tarjeta';
-  tarjeta.style.borderLeft = '6px solid ' + (permitido ? '#166438' : '#971b1b');
-  tarjeta.style.background = permitido ? '#eafaf1' : '#fdeeed';
+  /* Un resultado recuperado nunca se pinta como un ingreso nuevo: va en ámbar para que no se confunda con luz verde. */
+  tarjeta.style.borderLeft = '6px solid ' + (recuperado ? '#b54708' : permitido ? '#166438' : '#971b1b');
+  tarjeta.style.background = recuperado ? '#fff7ed' : permitido ? '#eafaf1' : '#fdeeed';
   const h = document.createElement('h2'); h.textContent = titulo;
   const p = document.createElement('p'); p.textContent = texto;
   const b = document.createElement('button'); b.type = 'button';
@@ -42,9 +43,13 @@
     return;
    }
    $('seguridad-solicitud-id').value = data.siguienteSolicitudId;
-   const motivos = {VALIDO:'Boleto vigente. Puede ingresar.',YA_UTILIZADA:'Este boleto ya fue utilizado. No se permite otro ingreso.',ANULADA:'El boleto está anulado.',IDENTIDAD_NO_COINCIDE:'El DNI no coincide con el asistente registrado.',EVENTO_INCORRECTO:'El boleto pertenece a otro evento.',QR_VENCIDO_O_FUERA_DE_INTERVALO:'El QR venció. Solicita mostrar el código actualizado.',QR_ALTERADO:'El código no es válido.',QR_MALFORMADO:'No se reconoce el formato del QR.',QR_DESCONOCIDO:'No se encontró una entrada asociada al QR.'};
-   const recuperado = data.recuperado ? ' Resultado recuperado de la misma solicitud; no autoriza otro ingreso.' : '';
-   mostrar(data.permitido ? 'ACCESO PERMITIDO' : 'ACCESO DENEGADO',(motivos[data.motivo] || data.motivo) + recuperado,data.permitido,false);
+   const motivos = {VALIDO:'Boleto vigente. Puede ingresar.',YA_UTILIZADA:'Este boleto ya fue utilizado. No se permite otro ingreso.',ANULADA:'El boleto está anulado.',IDENTIDAD_NO_COINCIDE:'El DNI no coincide con el asistente registrado.',EVENTO_INCORRECTO:'El boleto pertenece a otro evento.',QR_VENCIDO_O_FUERA_DE_INTERVALO:'El QR venció. Solicita mostrar el código actualizado.',QR_ALTERADO:'El código no es válido.',QR_MALFORMADO:'No se reconoce el formato del QR.',QR_DESCONOCIDO:'No se encontró una entrada asociada al QR.',SIN_NOMINACION:'La entrada no tiene asistente nominado.',QR_NO_EMITIDO:'La entrada aún no tiene un QR emitido.'};
+   const detalle = motivos[data.motivo] || data.motivo;
+   if (data.recuperado) {
+    mostrar('RESULTADO ANTERIOR RECUPERADO','Respuesta guardada de una lectura ya procesada (' + (data.permitido ? 'ACCESO PERMITIDO' : 'ACCESO DENEGADO') + ': ' + detalle + '). NO autoriza otro ingreso: no dejes pasar a otra persona con este resultado.',data.permitido,false,true);
+   } else {
+    mostrar(data.permitido ? 'ACCESO PERMITIDO' : 'ACCESO DENEGADO',detalle,data.permitido,false,false);
+   }
    pendiente = null;
   } catch (_) { mostrar('Sin respuesta del servidor','Comprueba tu conexión. El reintento conserva exactamente la misma lectura y el mismo DNI.',false,true); }
   finally { clearTimeout(timeout); ocupado = false; aviso('Revisa el resultado antes del siguiente asistente.'); }

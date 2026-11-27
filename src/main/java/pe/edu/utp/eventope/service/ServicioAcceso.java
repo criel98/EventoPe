@@ -49,6 +49,8 @@ public final class ServicioAcceso {
                 if(permitido&&!dao.consumir(c,e.id())){permitido=false;motivo="YA_UTILIZADA";}
                 int id=dao.registrar(c,solicitudId,hash,d,e==null?null:e.id(),ahora,permitido,motivo);
                 if(!permitido)dao.incidencia(c,id,motivo);
+                // Aviso al dueño de la entrada (módulo de notificaciones). Protegido por savepoint: si falla, el acceso no se pierde.
+                if(e!=null)ServicioNotificaciones.notificarAcceso(c,e.comprador(),e.evento(),d.id(),permitido,motivo,ahora);
                 c.commit();return new ResultadoAccesoDTO(id,permitido,motivo,false);
             }catch(SQLException|RuntimeException ex){try{c.rollback();}catch(SQLException rollback){ex.addSuppressed(rollback);}throw ex;}
         }
