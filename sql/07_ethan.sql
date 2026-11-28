@@ -11,3 +11,10 @@ INSERT INTO politica_devolucion(evento_id,dias_minimos_previos,penalizacion_porc
 VALUES(10,7,10.00,TRUE),(12,7,10.00,TRUE)
 ON DUPLICATE KEY UPDATE dias_minimos_previos=VALUES(dias_minimos_previos),
 penalizacion_porcentaje=VALUES(penalizacion_porcentaje),estado_activo=TRUE;
+
+-- Cuenta ficticia para administrar este módulo en la demo local.
+INSERT INTO administrador_plataforma(username,contrasena_hash,nivel_acceso,area_soporte)
+SELECT 'ethan.admin',
+       'pbkdf2-sha256$600000$e90QE6gHoZxS9cf4wiAowA==$+PGHOya5sZM75+EIG1Ureo4/eM7ib5Q+InCSH7UUiy8=',
+       'ADMIN','Cupones y devoluciones'
+WHERE NOT EXISTS (SELECT 1 FROM administrador_plataforma WHERE username='ethan.admin');

@@ -68,7 +68,7 @@ class CompraMySqlTest {
         CompraConfirmada reintento = servicio.confirmar(cliente, carrito);
         assertEquals(primera.getId(), reintento.getId(), "El reintento debe recuperar la misma compra");
         try (Connection c = conexion.abrir();
-             PreparedStatement p = c.prepareStatement("SELECT (SELECT COUNT(*) FROM detalle_transaccion WHERE transaccion_id = ?), (SELECT COUNT(*) FROM boleto_nominado b JOIN detalle_transaccion d ON d.entrada_id = b.entrada_id WHERE d.transaccion_id = ?), (SELECT aforo_disponible FROM categoria_asiento WHERE id = ?), (SELECT subtotal FROM transaccion_compra WHERE id = ?), (SELECT descuento FROM transaccion_compra WHERE id = ?), (SELECT total FROM transaccion_compra WHERE id = ?), (SELECT cupon_id FROM transaccion_compra WHERE id = ?)")) {
+             PreparedStatement p = c.prepareStatement("SELECT (SELECT COUNT(*) FROM detalle_transaccion WHERE transaccion_id = ?), (SELECT COUNT(*) FROM boleto_nominado b JOIN detalle_transaccion d ON d.entrada_id = b.entrada_id WHERE d.transaccion_id = ?), (SELECT aforo_disponible FROM categoria_asiento WHERE id = ?), (SELECT subtotal FROM transaccion_compra WHERE id = ?), (SELECT descuento FROM transaccion_compra WHERE id = ?), (SELECT total FROM transaccion_compra WHERE id = ?), (SELECT cupon_id FROM transaccion_compra WHERE id = ?), (SELECT COALESCE(SUM(descuento_aplicado), 0) FROM detalle_transaccion WHERE transaccion_id = ?), (SELECT COUNT(*) FROM detalle_transaccion WHERE transaccion_id = ? AND descuento_aplicado > precio_aplicado)")) {
             p.setInt(1, primera.getId());
             p.setInt(2, primera.getId());
             p.setInt(3, categoria);
@@ -76,6 +76,8 @@ class CompraMySqlTest {
             p.setInt(5, primera.getId());
             p.setInt(6, primera.getId());
             p.setInt(7, primera.getId());
+            p.setInt(8, primera.getId());
+            p.setInt(9, primera.getId());
             try (ResultSet r = p.executeQuery()) {
                 assertTrue(r.next());
                 assertEquals(2, r.getInt(1));
@@ -87,6 +89,8 @@ class CompraMySqlTest {
                 assertEquals(0, descuentoEsperado.compareTo(r.getBigDecimal(5)));
                 assertEquals(0, subtotalEsperado.subtract(descuentoEsperado).compareTo(r.getBigDecimal(6)));
                 assertTrue(r.getInt(7) > 0);
+                assertEquals(0, descuentoEsperado.compareTo(r.getBigDecimal(8)));
+                assertEquals(0, r.getInt(9), "El descuento individual nunca debe exceder el precio aplicado");
             }
         }
     }

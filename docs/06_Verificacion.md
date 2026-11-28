@@ -27,8 +27,12 @@ El proyecto utiliza 24 tablas y la vista historial_compra. Los precios y el cupo
 
 - Cámara física de teléfono y recorrido completo con HTTPS confiable en los dispositivos de exposición.
 - Pruebas formales de compradores concurrentes, carga, disponibilidad y rendimiento.
-- Funciones del alcance posterior: central, soporte, devoluciones, cupones y administración visual.
+- Funciones del alcance posterior en ese corte: central, soporte y administración general. Las funciones específicas de cupones/devoluciones de Ethan se completaron después; consultar `ETHAN_IMPLEMENTACION.md`.
 
 Los registros de `evidencias/pruebas_base.csv` y `evidencias/pruebas_daniel_frank.csv` corresponden a etapas anteriores. Las capturas y el resumen integrado se documentan en la sección 3.8 del informe del segundo entregable.
 
 TOTP, nominación y consumo único reducen reutilización y transferencia informal. El guardia debe contrastar la identidad del asistente; un QR temporal por sí solo no garantiza la eliminación de toda reventa.
+
+## Actualización del módulo de Ethan — 28 de noviembre de 2026
+
+El corte posterior pasó `mvn clean verify`: 92 pruebas reportadas, 0 fallos, 0 errores y 51 omitidas por integración MySQL no habilitada en ese comando. La integración específica de Ethan se ejecutó en `eventope_base_test`: 18/18 pasaron; `CompraMySqlTest`: 1/1 pasó. También se comprobó el login y CRUD administrativo por HTTP local. No se generaron capturas y no se solicitó devolución de ninguna compra demo existente. Casos y detalles verificables: `ETHAN_IMPLEMENTACION.md`.

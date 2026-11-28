@@ -8,11 +8,11 @@ EventoPe es una aplicación de venta de entradas nominadas con QR dinámico TOTP
 - Personal de validación: autenticación y una pantalla para comprobar el QR, la identidad del asistente y el estado de la entrada.
 - Diseño adaptable a teléfono y computadora, con prioridad para la experiencia móvil.
 
-La central, los perfiles del personal, la mensajería y los paneles administrativos corresponden a una etapa posterior.
+La central, los perfiles del personal, la mensajería y la administración general corresponden a una etapa posterior. El panel específico de Ethan para cupones y políticas de devolución forma parte del alcance de compra.
 
 ## Estado de implementación
 
-La base común contiene 25 clases del dominio, esquema SQL, configuración JDBC, controles de sesión y formularios, servicios TOTP y de validación, pruebas automatizadas y estilos compartidos. El catálogo, el registro, la autenticación y la edición de cuenta están implementados y probados. La selección, la compra simulada, las nominaciones, los boletos TOTP y el panel de validación están integrados. Se comprobó el flujo en navegador con datos ficticios; el ensayo con cámara física en teléfono sigue pendiente. Ver `docs/08_Daniel_Frank.md`. Los resultados y límites de las pruebas se detallan en `docs/06_Verificacion.md`.
+La base común contiene 25 clases del dominio, esquema SQL, configuración JDBC, controles de sesión y formularios, servicios TOTP y de validación, pruebas automatizadas y estilos compartidos. El catálogo, el registro, la autenticación y la edición de cuenta están implementados y probados. La selección, la compra simulada, las nominaciones, cupones, devoluciones, los boletos TOTP y el panel de validación están integrados. El módulo de Ethan pasó pruebas MySQL aisladas; también se verificó por HTTP el login y CRUD administrativo. Se comprobó el flujo anterior en navegador con datos ficticios; el ensayo con cámara física en teléfono sigue pendiente. Ver `docs/08_Daniel_Frank.md` y `docs/ETHAN_IMPLEMENTACION.md`. Los resultados y límites de las pruebas se detallan en `docs/06_Verificacion.md`.
 
 ## Responsabilidades
 
@@ -20,7 +20,7 @@ La base común contiene 25 clases del dominio, esquema SQL, configuración JDBC,
 |---|---|---|
 | Daniel | Catálogo y detalle de eventos | [Ficha de Daniel](docs/equipo/Daniel.md) |
 | Frank | Cuenta del cliente y autenticación del guardia | [Ficha de Frank](docs/equipo/Frank.md) |
-| Ethan | Carrito, compra simulada y nominación | [Ficha de Ethan](docs/equipo/Ethan.md) |
+| Ethan | Carrito, compra simulada, cupones y devoluciones | [Ficha de Ethan](docs/equipo/Ethan.md) |
 | Glenn | Boletos, QR y pantalla de validación | [Ficha de Glenn](docs/equipo/Glenn.md) |
 
 Las responsabilidades indican trabajo asignado. La finalización de cada tarea requiere implementación, pruebas y revisión de su integración.

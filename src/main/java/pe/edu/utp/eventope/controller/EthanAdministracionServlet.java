@@ -6,11 +6,13 @@ import jakarta.servlet.http.*;
 import pe.edu.utp.eventope.config.ConexionBD;
 import pe.edu.utp.eventope.config.Configuracion;
 import pe.edu.utp.eventope.dto.SesionUsuario;
+import pe.edu.utp.eventope.service.ReglasCupon;
 import pe.edu.utp.eventope.util.Csrf;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
 @WebServlet("/admin/ethan")
@@ -39,8 +41,9 @@ public final class EthanAdministracionServlet extends HttpServlet {
     }
 
     @Override protected void doPost(HttpServletRequest req,HttpServletResponse resp) throws IOException,ServletException {
-        if(!exigirAdmin(req,resp)||!Csrf.valido(req.getSession(false),req.getParameter("csrf"))) {
-            if(req.getSession(false)!=null) resp.sendError(403,"Token de seguridad inválido");
+        if(!exigirAdmin(req,resp)) return;
+        if(!Csrf.valido(req.getSession(false),req.getParameter("csrf"))) {
+            resp.sendError(HttpServletResponse.SC_FORBIDDEN,"Token de seguridad inválido");
             return;
         }
         String accion=req.getParameter("accion");
@@ -54,18 +57,33 @@ public final class EthanAdministracionServlet extends HttpServlet {
                 req.getSession().setAttribute("mensajeEthan","Configuración guardada correctamente.");
                 resp.sendRedirect(req.getContextPath()+"/admin/ethan");
             } catch(SQLException|IllegalArgumentException e) {
-                c.rollback();
-                req.setAttribute("error",e.getMessage());
+                try {
+                    c.rollback();
+                } catch(SQLException rollback) {
+                    e.addSuppressed(rollback);
+                    throw new ServletException("No se pudo revertir la configuración parcial",e);
+                }
+                if(e instanceof SQLException) {
+                    getServletContext().log("No se pudo guardar la configuración de Ethan",e);
+                    req.setAttribute("error","No se pudo guardar. Comprueba los datos y que el evento exista.");
+                } else {
+                    req.setAttribute("error",e.getMessage());
+                }
                 doGet(req,resp);
             }
         } catch(SQLException e){ throw new ServletException("No se pudo guardar la configuración",e); }
     }
 
     private static void guardarCupon(Connection c,HttpServletRequest req) throws SQLException {
-        String codigo=req.getParameter("codigo").trim().toUpperCase();
-        BigDecimal porcentaje=new BigDecimal(req.getParameter("porcentaje"));
-        Timestamp expira=Timestamp.valueOf(LocalDateTime.parse(req.getParameter("expiracion")));
-        if(!codigo.matches("[A-Z0-9_-]{1,20}")||porcentaje.signum()<0||porcentaje.compareTo(new BigDecimal("100"))>0)
+        String codigo=ReglasCupon.normalizarCodigo(requerido(req,"codigo"));
+        BigDecimal porcentaje=new BigDecimal(requerido(req,"porcentaje"));
+        Timestamp expira;
+        try {
+            expira=Timestamp.valueOf(LocalDateTime.parse(requerido(req,"expiracion")));
+        } catch(DateTimeException e) {
+            throw new IllegalArgumentException("La fecha de vencimiento no es válida.",e);
+        }
+        if(porcentaje.signum()<0||porcentaje.compareTo(new BigDecimal("100"))>0)
             throw new IllegalArgumentException("Datos de cupón inválidos.");
         try(PreparedStatement p=c.prepareStatement(
                 "INSERT INTO cupon_descuento(codigo_cupon,porcentaje_descuento,fecha_expiracion,estado) "
@@ -78,9 +96,9 @@ public final class EthanAdministracionServlet extends HttpServlet {
     }
 
     private static void guardarPolitica(Connection c,HttpServletRequest req) throws SQLException {
-        int evento=Integer.parseInt(req.getParameter("evento"));
-        int dias=Integer.parseInt(req.getParameter("dias"));
-        BigDecimal penalizacion=new BigDecimal(req.getParameter("penalizacion"));
+        int evento=Integer.parseInt(requerido(req,"evento"));
+        int dias=Integer.parseInt(requerido(req,"dias"));
+        BigDecimal penalizacion=new BigDecimal(requerido(req,"penalizacion"));
         if(dias<0||penalizacion.signum()<0||penalizacion.compareTo(new BigDecimal("100"))>0)
             throw new IllegalArgumentException("Datos de política inválidos.");
         try(PreparedStatement p=c.prepareStatement(
@@ -93,10 +111,16 @@ public final class EthanAdministracionServlet extends HttpServlet {
         }
     }
 
+    private static String requerido(HttpServletRequest req,String nombre) {
+        String valor=req.getParameter(nombre);
+        if(valor==null||valor.isBlank()) throw new IllegalArgumentException("Completa todos los campos requeridos.");
+        return valor.trim();
+    }
+
     private static boolean exigirAdmin(HttpServletRequest req,HttpServletResponse resp) throws IOException {
         Object o=req.getSession().getAttribute("sesionUsuario");
         if(!(o instanceof SesionUsuario a)||a.getTipo()!=SesionUsuario.Tipo.PERSONAL||a.getRol()!=SesionUsuario.Rol.ADMIN) {
-            resp.sendRedirect(req.getContextPath()+"/personal/login"); return false;
+            resp.sendRedirect(req.getContextPath()+"/admin/ethan/login"); return false;
         }
         return true;
     }

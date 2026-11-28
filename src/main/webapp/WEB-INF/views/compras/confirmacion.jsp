@@ -20,6 +20,8 @@
             <dd><strong><c:out value="${compra.evento}"/></strong></dd>
             <dt>Código de compra</dt>
             <dd><code><c:out value="${compra.codigo}"/></code></dd>
+            <dt>ID de compra</dt>
+            <dd><c:out value="${compra.id}"/></dd>
             <dt>Comprobante académico</dt>
             <dd><code><c:out value="${compra.comprobante}"/></code></dd>
             <dt>Entradas</dt>
@@ -32,6 +34,7 @@
         <p>Guarda el código de compra para tu referencia.</p>
         <div style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
             <a class="boton" href="<c:url value='/entradas'/>">Ver mis entradas</a>
+            <a class="boton" style="background:#4c5870;" href="<c:url value='/compras/devolver?id=${compra.id}'/>">Solicitar devolución</a>
             <a class="boton" style="background:#4c5870;" href="<c:url value='/eventos'/>">Volver a eventos</a>
         </div>
     </section>

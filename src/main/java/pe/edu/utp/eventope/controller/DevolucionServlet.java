@@ -22,8 +22,13 @@ public final class DevolucionServlet extends HttpServlet {
     }
 
     @Override protected void doGet(HttpServletRequest req,HttpServletResponse resp) throws IOException,ServletException {
+        Object o=req.getSession().getAttribute("sesionUsuario");
+        if(!(o instanceof SesionUsuario actor)||actor.getTipo()!=SesionUsuario.Tipo.CLIENTE) {
+            resp.sendRedirect(req.getContextPath()+"/login"); return;
+        }
         req.setAttribute("csrf",Csrf.token(req.getSession()));
         req.setAttribute("transaccionId",req.getParameter("id"));
+        resp.setHeader("Cache-Control","no-store");
         req.getRequestDispatcher("/WEB-INF/views/compras/devolucion.jsp").forward(req,resp);
     }
 

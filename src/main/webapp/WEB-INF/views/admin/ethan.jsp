@@ -43,9 +43,39 @@
 
   <section class="tarjeta">
     <h2>Cupones registrados</h2>
-    <c:forEach var="c" items="${cupones}">
-      <p><code><c:out value="${c.codigo}"/></code> — <c:out value="${c.porcentaje}"/>% — <c:out value="${c.estado}"/></p>
-    </c:forEach>
+    <table>
+      <thead><tr><th>Código</th><th>Descuento</th><th>Vence</th><th>Estado</th></tr></thead>
+      <tbody>
+      <c:forEach var="c" items="${cupones}">
+        <tr>
+          <td><code><c:out value="${c.codigo}"/></code></td>
+          <td><c:out value="${c.porcentaje}"/>%</td>
+          <td><c:out value="${c.expiracion}"/></td>
+          <td><c:out value="${c.estado}"/></td>
+        </tr>
+      </c:forEach>
+      </tbody>
+    </table>
+    <p>Para actualizar un cupón, vuelve a guardar su mismo código con el nuevo porcentaje, vencimiento y estado.</p>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Políticas registradas</h2>
+    <table>
+      <thead><tr><th>Evento</th><th>ID</th><th>Plazo mínimo</th><th>Penalización</th><th>Estado</th></tr></thead>
+      <tbody>
+      <c:forEach var="p" items="${politicas}">
+        <tr>
+          <td><c:out value="${p.evento}"/></td>
+          <td><c:out value="${p.eventoId}"/></td>
+          <td><c:out value="${p.dias}"/> días</td>
+          <td><c:out value="${p.penalizacion}"/>%</td>
+          <td><c:out value="${p.activa ? 'Activa' : 'Inactiva'}"/></td>
+        </tr>
+      </c:forEach>
+      </tbody>
+    </table>
+    <p>Para actualizar una política, guarda de nuevo el mismo ID de evento.</p>
   </section>
 </main>
 </body>

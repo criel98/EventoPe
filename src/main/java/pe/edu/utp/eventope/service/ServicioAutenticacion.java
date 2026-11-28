@@ -29,4 +29,14 @@ public final class ServicioAutenticacion {
             return Optional.of(new SesionUsuario(u.getId(),SesionUsuario.Tipo.PERSONAL,SesionUsuario.Rol.VALIDACION,u.getUsername()));
         }catch(SQLException e){throw new IllegalStateException("No se pudo iniciar sesión. Inténtalo nuevamente.",e);}
     }
+    public Optional<SesionUsuario> autenticarAdministrador(String nombre,char[] clave){
+        if(nombre==null||nombre.length()>50||clave==null||clave.length>128)return Optional.empty();
+        try(Connection c=conexiones.abrir()){
+            var encontrado=new PersonalDAO().buscarPorUsername(c,nombre.trim());
+            if(encontrado.isEmpty())return Optional.empty();
+            var u=encontrado.get();
+            if(!"ACTIVO".equals(u.getEstado())||!"ADMIN".equals(u.getNivelAcceso())||!PasswordUtil.verificar(clave,u.getContrasenaHash()))return Optional.empty();
+            return Optional.of(new SesionUsuario(u.getId(),SesionUsuario.Tipo.PERSONAL,SesionUsuario.Rol.ADMIN,u.getUsername()));
+        }catch(SQLException e){throw new IllegalStateException("No se pudo iniciar sesión. Inténtalo nuevamente.",e);}
+    }
 }

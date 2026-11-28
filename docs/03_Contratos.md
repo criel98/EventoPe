@@ -1,12 +1,12 @@
 # Acuerdos comunes para que las cuatro partes encajen
 
-Estos acuerdos definen las interfaces y dependencias del trabajo de Semana 10. La central y los paneles de administración corresponden a una fase posterior; sus modelos se conservan.
+Estos acuerdos definen las interfaces y dependencias del trabajo de Semana 10. La central, soporte y administración general corresponden a una fase posterior; Ethan incluye administración propia de cupones y políticas de devolución.
 
 ## Archivos compartidos
 
 La base define los nombres compartidos de modelos y tablas; los cambios deben coordinarse antes de su implementación. El integrador es Leonardo. Si alguien necesita otra columna, propone el cambio al integrador antes de editar SQL por su cuenta. Los nombres definitivos están en `Diccionario.md`.
 
-Frank es dueño de login/sesión; Daniel de catálogo; Ethan de compra/entrada/nominación; Glenn de páginas de boleto/seguridad. Los servicios TOTP y acceso de esta base son compartidos y ya probados. Se debe reutilizar su implementación y mantener sus pruebas al conectar las interfaces.
+Frank es dueño del login general/sesión; Daniel de catálogo; Ethan de compra, cupones y devoluciones; Glenn de páginas de boleto/seguridad. El login general de personal solo autoriza VALIDACION; Ethan tiene acceso administrativo separado, autenticado contra ADMIN. Los servicios TOTP y acceso de esta base son compartidos y ya probados. Se debe reutilizar su implementación y mantener sus pruebas al conectar las interfaces.
 
 ## Identidad
 
@@ -26,6 +26,9 @@ La sesión HTTP guarda un objeto `SesionUsuario` bajo el nombre `sesionUsuario`.
 | Ethan | GET/POST `/compras/nominacion` | Un asistente por boleto |
 | Ethan | GET `/compras/revision`; POST `/compras/confirmar` | Pago simulado y compra atómica |
 | Ethan | GET `/compras/confirmacion?id=...` | Compra/comprobante propio |
+| Ethan | GET/POST `/compras/devolver` | Solicitud de devolución de compra propia |
+| Ethan | GET/POST `/admin/ethan/login` | Acceso admin de cupones/devoluciones |
+| Ethan | GET/POST `/admin/ethan` | Listar y guardar cupones/políticas |
 | Glenn | GET `/entradas`; GET `/entradas/boleto?id=...` | Lista y boleto del comprador |
 | Glenn | POST `/entradas/qr` | Obtener credencial temporal con `ServicioQr.obtener` |
 | Glenn | GET `/seguridad/panel`; POST `/seguridad/validar` | Única pantalla del guardia y comprobación |
@@ -36,11 +39,17 @@ Todas las rutas se resuelven bajo el contexto `/EventoPe`; JSP con `c:url`. Las 
 
 Ethan crea DTO auxiliares de carrito/solicitud, no nuevas entidades persistentes: un evento, líneas de categoría/cantidad y nominaciones (DNI/nombres/apellidos). Cantidad total de 1 a 4. El formulario de Daniel manda solo eventoId, categoriaId, cantidad al POST acordado. Carrito no reserva stock y no incluye temporizador de diez minutos.
 
-Ethan genera UUID para `codigoUnico`; para `solicitudHash` usa una representación canónica del pedido (mismo orden de líneas y campos), nunca el total que envió el navegador. Bloquea cliente, evento y zonas ordenadas; comprueba publicación, stock y máximo de cuatro entradas no anuladas por cliente/evento, incluso entre sesiones. Obtiene precios de BD. Este alcance no aplica cupones: descuento=0 y cuponId=NULL. El IGV es solo un dato incluido del comprobante académico, no una suma adicional; la demo puede usar igv=0 sin afirmar cálculo tributario.
+Ethan genera UUID para `codigoUnico`; para `solicitudHash` usa una representación canónica del pedido (mismo orden de líneas y campos), nunca el total que envió el navegador. Bloquea cliente, evento y zonas ordenadas; comprueba publicación, stock y máximo de cuatro entradas no anuladas por cliente/evento, incluso entre sesiones. Obtiene precios de BD. Un código de cupón es opcional: se normaliza y valida en el servidor contra estado y vencimiento; subtotal, descuento y total se calculan y persisten en servidor, con descuento global distribuido en los detalles. El IGV es solo un dato incluido del comprobante académico, no una suma adicional; la demo usa igv=0 sin afirmar cálculo tributario.
 
 Una compra de n boletos inserta una transacción, n entradas, n detalles, n nominaciones, un pago aprobado y un comprobante. Entrada antes de detalle, porque detalle referencia entrada. `codigoEntrada` debe ser UUID minúsculo estándar, generado en servidor. `estadoUso=DISPONIBLE`. Los códigos públicos no son claves de acceso.
 
 Todo en la MISMA Connection: `setAutoCommit(false)`, INSERT/UPDATE, commit o rollback. DAO no confirma ni cierra una conexión ajena. Usar claves generadas, nunca `MAX(id)+1`. El pago simulado rechazado no genera compra confirmada ni descuenta cupo. Reintento de misma clave devuelve la compra original solo al propietario y con el mismo contenido. Recalcular importes desde BD, no aceptar total de POST.
+
+## Cupones y devoluciones de Ethan
+
+El panel `/admin/ethan` requiere una sesión ADMIN autenticada por `/admin/ethan/login`; el rol no se acepta desde un formulario. La administración puede crear/actualizar códigos, porcentaje, expiración y estado, y configurar política por evento (días mínimos y penalización). `sql/07_ethan.sql` añade únicamente datos demo, sin cambiar el esquema.
+
+La devolución cubre la compra completa. Se bloquean compra, evento, política y entradas en una transacción; solo el propietario puede devolver una compra confirmada, dentro del plazo configurado y si todas sus entradas siguen DISPONIBLE. El servidor calcula reembolso, anula entradas, restaura cupos una vez y cambia estado a DEVUELTA. La repetición devuelve el reembolso existente. Notificaciones posteriores al commit son responsabilidad de Glenn.
 
 ## Boleto y TOTP
 

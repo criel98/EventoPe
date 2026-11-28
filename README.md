@@ -9,16 +9,17 @@ Java 17, Maven 3.9, WAR, Tomcat 10.1, Jakarta Servlet 6, JSP/JSTL 3, JDBC y MySQ
 ## Preparación
 
 1. Para un entorno nuevo, crear una base y ejecutar `sql/01_esquema.sql` y `sql/02_datos_demo.sql` según `docs/01_Workbench.md`.
-2. Copiar `config/eventope.properties.example` como `config/eventope.local.properties`. La copia local está ignorada por Git. Rellenar URL, usuario y contraseña de su base.
-3. Ejecutar `mvn compile`. Generar una clave maestra privada con:
+2. Ejecutar `sql/07_ethan.sql` después de cargar los eventos demo. Este script agrega el cupón/políticas de ejemplo y una cuenta ficticia para administrar el módulo de Ethan; no recrea tablas ni elimina datos.
+3. Copiar `config/eventope.properties.example` como `config/eventope.local.properties`. La copia local está ignorada por Git. Rellenar URL, usuario y contraseña de su base.
+4. Ejecutar `mvn compile`. Generar una clave maestra privada con:
 
 ```powershell
 java -cp target/classes pe.edu.utp.eventope.util.GenerarClaveMaestra
 ```
 
-4. Copiar el resultado únicamente a `totp.masterKey` del archivo local. Conservar la misma clave para la misma base: cambiarla hace ilegibles secretos TOTP ya creados. Cada entorno de desarrollo puede usar su base y clave. No subirla a GitHub ni incluirla en capturas.
-5. Configurar en la JVM de Tomcat `-Deventope.config=C:/ruta/privada/eventope.local.properties`, o la variable `EVENTOPE_CONFIG` con esa ruta absoluta. No introducir la clave en el POM.
-6. Instanciar `Configuracion.cargar()`, `ConexionBD`, `CifradoSecretos(config.requerido("totp.masterKey"))` y `Clock.systemUTC()` al construir servicios. No cargar la configuración por cada botón ni exponerla al navegador.
+5. Copiar el resultado únicamente a `totp.masterKey` del archivo local. Conservar la misma clave para la misma base: cambiarla hace ilegibles secretos TOTP ya creados. Cada entorno de desarrollo puede usar su base y clave. No subirla a GitHub ni incluirla en capturas.
+6. Configurar en la JVM de Tomcat `-Deventope.config=C:/ruta/privada/eventope.local.properties`, o la variable `EVENTOPE_CONFIG` con esa ruta absoluta. No introducir la clave en el POM.
+7. Instanciar `Configuracion.cargar()`, `ConexionBD`, `CifradoSecretos(config.requerido("totp.masterKey"))` y `Clock.systemUTC()` al construir servicios. No cargar la configuración por cada botón ni exponerla al navegador.
 
 ## Compilar y probar
 
@@ -45,7 +46,7 @@ Resultados registrados: `docs/06_Verificacion.md`. El recorrido cliente → comp
 
 ## Despliegue
 
-El paquete es `target/EventoPe.war`. Desplegarlo en Tomcat 10.1. Rutas disponibles: `/EventoPe/eventos`, `/EventoPe/eventos/detalle?id=10`, `/EventoPe/registro`, `/EventoPe/login`, `/EventoPe/cuenta/perfil` y `/EventoPe/personal/login`. `/EventoPe/salud` verifica despliegue HTTP. La compra, mis entradas, el boleto TOTP y el panel de validación están conectados. La selección es un paso interno de compra, sin carrito en el menú.
+El paquete es `target/EventoPe.war`. Desplegarlo en Tomcat 10.1. Rutas disponibles: `/EventoPe/eventos`, `/EventoPe/eventos/detalle?id=10`, `/EventoPe/registro`, `/EventoPe/login`, `/EventoPe/cuenta/perfil`, `/EventoPe/personal/login` y `/EventoPe/admin/ethan/login`. `/EventoPe/salud` verifica despliegue HTTP. La compra, mis entradas, el boleto TOTP, el panel de validación y la administración de Ethan están conectados. La selección es un paso interno de compra, sin carrito en el menú.
 
 `WEB-INF/web.xml` marca la cookie de sesión como Secure: el entorno debe servir HTTPS para probar login. No desactivar esta protección para la demostración desde móviles. La cámara de un teléfono también debe probarse bajo HTTPS con certificado confiable por ese teléfono. Tener una dirección HTTP en la red local no garantiza acceso a cámara.
 
@@ -56,9 +57,10 @@ El catálogo y las cuentas se comprobaron en Tomcat 10.1 con HTTPS local. Se ver
 - Cliente A: `cliente.a@example.invalid`, contraseña `ClienteDemo2026!`, DNI `10000001`.
 - Cliente B: `cliente.b@example.invalid`, misma contraseña demo, DNI `10000002`.
 - Guardia: usuario `guardia.demo`, contraseña `GuardiaDemo2026!`.
+- Administrador de demo de Ethan: usuario `ethan.admin`, contraseña `EthanAdminDemo2026!`; entrar por `/EventoPe/admin/ethan/login`.
 - Dispositivo demo: id 1, operador 1, evento 10 (Rock Fest), puerta Norte. Credencial ficticia de enrolamiento `DispositivoDemo2026-solo-local`. Su hash, no su valor, está en SQL. La credencial se resuelve en el servidor mediante configuración y asignación de sesión; no se incorpora a JavaScript público.
 
-Son accesos públicos de prueba. No son cuentas de una aplicación desplegada ni contraseñas reales. El login de clientes y del personal de validación está implementado. Los datos incluyen una compra y una entrada de demostración para desarrollar el boleto de forma independiente del checkout. Estos datos no acreditan una compra realizada mediante la interfaz.
+Son accesos públicos de prueba. No son cuentas de una aplicación desplegada ni contraseñas reales. El usuario administrador se instala únicamente con `sql/07_ethan.sql`; eliminarlo o cambiar su contraseña antes de cualquier despliegue fuera de una demostración local. El login de clientes, del personal de validación y de la administración de Ethan está implementado. Los datos incluyen una compra y una entrada de demostración para desarrollar el boleto de forma independiente del checkout. Estos datos no acreditan una compra realizada mediante la interfaz.
 
 ## Fuentes técnicas
 

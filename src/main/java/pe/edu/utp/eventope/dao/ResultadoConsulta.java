@@ -10,8 +10,21 @@ import java.util.List;
 public final class ResultadoConsulta {
     private ResultadoConsulta() {}
 
-    public record Cupon(int id,String codigo,BigDecimal porcentaje,LocalDateTime expiracion,String estado){}
-    public record Politica(int eventoId,String evento,int dias,BigDecimal penalizacion,boolean activa){}
+    public record Cupon(int id,String codigo,BigDecimal porcentaje,LocalDateTime expiracion,String estado){
+        public int getId(){return id;}
+        public String getCodigo(){return codigo;}
+        public BigDecimal getPorcentaje(){return porcentaje;}
+        public LocalDateTime getExpiracion(){return expiracion;}
+        public String getEstado(){return estado;}
+    }
+
+    public record Politica(int eventoId,String evento,int dias,BigDecimal penalizacion,boolean activa){
+        public int getEventoId(){return eventoId;}
+        public String getEvento(){return evento;}
+        public int getDias(){return dias;}
+        public BigDecimal getPenalizacion(){return penalizacion;}
+        public boolean isActiva(){return activa;}
+    }
 
     public static List<Cupon> cupones(ResultSet r) throws SQLException {
         List<Cupon> lista=new ArrayList<>();

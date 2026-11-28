@@ -3,6 +3,8 @@ package pe.edu.utp.eventope.dao;
 import pe.edu.utp.eventope.dto.*;
 import pe.edu.utp.eventope.service.ReglasCupon;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.*;
 
@@ -149,6 +151,7 @@ public final class CompraDAO {
             }
         }
         BigDecimal total = subtotal.subtract(descuento).setScale(2);
+        List<BigDecimal> descuentosDetalle = distribuirDescuento(carrito, zonas, subtotal, descuento);
 
         String sql = "INSERT INTO transaccion_compra(codigo_unico, solicitud_hash, cliente_id, evento_id, cupon_id, subtotal, descuento, igv, total, estado) VALUES(?, ?, ?, ?, ?, ?, ?, 0, ?, 'CONFIRMADA')";
         int compraId;
@@ -169,6 +172,7 @@ public final class CompraDAO {
         }
 
         int nom = 0;
+        int detalle = 0;
         for (LineaCarrito l : carrito.getLineas()) {
             for (int i = 0; i < l.getCantidad(); i++) {
                 NominacionAsistente a = carrito.getNominaciones().get(nom++);
@@ -185,10 +189,11 @@ public final class CompraDAO {
                         entradaId = k.getInt(1);
                     }
                 }
-                try (PreparedStatement p = c.prepareStatement("INSERT INTO detalle_transaccion(transaccion_id, entrada_id, precio_aplicado, descuento_aplicado) VALUES(?, ?, ?, 0)")) {
+                try (PreparedStatement p = c.prepareStatement("INSERT INTO detalle_transaccion(transaccion_id, entrada_id, precio_aplicado, descuento_aplicado) VALUES(?, ?, ?, ?)")) {
                     p.setInt(1, compraId);
                     p.setInt(2, entradaId);
                     p.setBigDecimal(3, zonas.get(l.getCategoriaId()).precio);
+                    p.setBigDecimal(4, descuentosDetalle.get(detalle++));
                     p.executeUpdate();
                 }
                 try (PreparedStatement p = c.prepareStatement("INSERT INTO boleto_nominado(entrada_id, dni_asistente, nombres_asistente, apellidos_asistente) VALUES(?, ?, ?, ?)")) {
@@ -228,6 +233,67 @@ public final class CompraDAO {
         }
 
         return new CompraConfirmada(compraId, carrito.getClaveConfirmacion(), serie, nombreEvento, total, carrito.getCantidadTotal());
+    }
+
+    private static List<BigDecimal> distribuirDescuento(CarritoCompra carrito, Map<Integer, PrecioZona> zonas,
+                                                         BigDecimal subtotal, BigDecimal descuento) {
+        List<CuotaDescuento> cuotas = new ArrayList<>();
+        long subtotalCentimos = subtotal.setScale(2, RoundingMode.UNNECESSARY).movePointRight(2).longValueExact();
+        long descuentoCentimos = descuento.setScale(2, RoundingMode.UNNECESSARY).movePointRight(2).longValueExact();
+        if (subtotalCentimos == 0 || descuentoCentimos == 0) {
+            int cantidad = carrito.getCantidadTotal();
+            return new ArrayList<>(Collections.nCopies(cantidad, BigDecimal.ZERO.setScale(2)));
+        }
+
+        BigInteger divisor = BigInteger.valueOf(subtotalCentimos);
+        long asignado = 0;
+        int indice = 0;
+        for (LineaCarrito linea : carrito.getLineas()) {
+            long precioCentimos = zonas.get(linea.getCategoriaId()).precio
+                    .setScale(2, RoundingMode.UNNECESSARY).movePointRight(2).longValueExact();
+            BigInteger numerador = BigInteger.valueOf(descuentoCentimos).multiply(BigInteger.valueOf(precioCentimos));
+            BigInteger[] division = numerador.divideAndRemainder(divisor);
+            long base = division[0].longValueExact();
+            for (int i = 0; i < linea.getCantidad(); i++) {
+                cuotas.add(new CuotaDescuento(indice++, base, precioCentimos, division[1]));
+                asignado += base;
+            }
+        }
+
+        long pendientes = descuentoCentimos - asignado;
+        List<CuotaDescuento> prioridad = new ArrayList<>(cuotas);
+        prioridad.sort(Comparator.comparing(CuotaDescuento::resto).reversed()
+                .thenComparingInt(CuotaDescuento::indice));
+        for (CuotaDescuento cuota : prioridad) {
+            if (pendientes == 0) break;
+            if (cuota.centimos < cuota.precioCentimos) {
+                cuota.centimos++;
+                pendientes--;
+            }
+        }
+        if (pendientes != 0) throw new IllegalStateException("No se pudo distribuir el descuento de la compra.");
+
+        cuotas.sort(Comparator.comparingInt(CuotaDescuento::indice));
+        List<BigDecimal> resultado = new ArrayList<>(cuotas.size());
+        for (CuotaDescuento cuota : cuotas) resultado.add(BigDecimal.valueOf(cuota.centimos, 2));
+        return resultado;
+    }
+
+    private static final class CuotaDescuento {
+        private final int indice;
+        private long centimos;
+        private final long precioCentimos;
+        private final BigInteger resto;
+
+        private CuotaDescuento(int indice, long centimos, long precioCentimos, BigInteger resto) {
+            this.indice = indice;
+            this.centimos = centimos;
+            this.precioCentimos = precioCentimos;
+            this.resto = resto;
+        }
+
+        int indice() { return indice; }
+        BigInteger resto() { return resto; }
     }
 
     private static final class PrecioZona {

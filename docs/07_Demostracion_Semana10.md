@@ -5,7 +5,7 @@
 1. Integrador: publicar la base revisada y confirmar que los cuatro usan la misma revisión, esquema y contratos. Cada uno usa BD local propia. Configuración y claves quedan fuera de Git.
 2. Frank: login y sesiones de cliente/guardia. Integrador: Tomcat y HTTPS accesible desde los dispositivos de demostración.
 3. Daniel: catálogo y detalle; Ethan: carrito que recibe ese formulario. En paralelo Glenn conecta la entrada DEMO con boleto/panel.
-4. Ethan: compra transaccional y nominaciones; Glenn: mostrar sus entradas recién creadas.
+4. Ethan: compra transaccional, nominaciones, cupones y devoluciones; Glenn: mostrar las entradas recién creadas y conectar notificaciones después del commit.
 5. Todos: recorrer el flujo completo en la misma instalación y corregir errores antes de capturar. Guardar versión/commit utilizado. No integrar cambios sin revisión al final de la presentación.
 
 Los compañeros trabajan en sus archivos; cada pequeña entrega se integra antes de seguir con la siguiente. La central queda para la fase posterior. Las dependencias de sesión, esquema y compra existen aunque cada compañero tenga una tarea propia.
@@ -34,6 +34,8 @@ No reiniciar a mano el estado de una entrada usada para hacer pasar una prueba. 
 | E06 | Único panel: permitido | ServicioAcceso y actualización atómica | RF-12, RF-13 |
 | E07 | Denegado: usado/vencido/alterado | Motivos y registro de incidencia | RF-13, RF-14 |
 | E08 | Cliente en escritorio y móvil | JSP/CSS adaptable | RNF-06, pruebas pendientes por navegador |
+| E09 | Admin de Ethan: cupón y política por evento | Login ADMIN, CSRF y persistencia JDBC | RF-06 y devolución |
+| E10 | Reembolso válido/rechazado, entradas y aforo | Atomicidad de `DevolucionDAO` y restricciones | Devoluciones de Ethan |
 
 Por cada evidencia escribir: pantalla, propósito, pasos, resultado esperado, resultado obtenido, fecha, navegador/dispositivo, versión del código y RF. Insertar fragmento corto del código final con archivo y explicación. Las capturas deben mostrar resultados del sistema propio, no maquetas ni pantallas generadas.
 
@@ -41,7 +43,7 @@ Los tests automatizados de la base pueden anexarse como evidencia del núcleo. N
 
 ## Qué queda para después
 
-RF-02 y RF-03: administración por pantalla (los datos demo no completan esos RF). RF-06 cupones. RF-15 resolución/ingreso manual. RF-16 devoluciones. RF-17 notificaciones. RF-18 soporte. RF-20 administración del personal (un login de guardia no completa ese RF). RF-01 queda parcial si falta historial/preferencias. RF-19 queda parcial si falta la verificación adicional ante abuso. No afirmar que los veinte RF están terminados.
+RF-02 y RF-03: administración general de eventos/clientes (no incluye el panel propio de Ethan). RF-15 resolución/ingreso manual. RF-17 notificaciones. RF-18 soporte. RF-20 administración general del personal (un login de guardia no completa ese RF). RF-01 queda parcial si falta historial/preferencias. RF-19 queda parcial si falta la verificación adicional ante abuso. Cupones y devoluciones del alcance de Ethan se completaron y probaron; ver `ETHAN_IMPLEMENTACION.md`. No afirmar que los veinte RF están terminados.
 
 ## Checklist de cierre de Semana 10
 
