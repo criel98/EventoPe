@@ -51,6 +51,8 @@ public final class ServicioCompra {
 
     private String hashCanonico(CarritoCompra c) {
         StringBuilder s = new StringBuilder().append(c.getEventoId()).append('|');
+        s.append(c.getCodigoCupon() == null ? "" : c.getCodigoCupon()).append('|');
+        s.append(c.isPagoRechazado()).append('|');
         for (LineaCarrito l : c.getLineas()) {
             s.append(l.getCategoriaId()).append(':').append(l.getCantidad()).append('|');
         }

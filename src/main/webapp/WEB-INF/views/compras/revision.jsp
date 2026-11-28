@@ -48,6 +48,14 @@
         <p>Antes de confirmar, guarda los datos de todos los asistentes.</p>
         <form method="post" action="<c:url value='/compras/confirmar'/>" class="formulario">
             <input type="hidden" name="csrf" value="${csrf}"/>
+            <label for="codigoCupon">Código de cupón (opcional)</label>
+            <input id="codigoCupon" name="codigoCupon" maxlength="20" autocomplete="off"
+                   value="<c:out value='${param.codigoCupon}'/>"/>
+            <label for="estadoPago">Resultado del pago simulado</label>
+            <select id="estadoPago" name="estadoPago">
+                <option value="APROBADO">Aprobado</option>
+                <option value="RECHAZADO">Rechazado (prueba de fallo)</option>
+            </select>
             <button type="submit" <c:if test="${carrito.nominaciones.size() ne carrito.cantidadTotal}">disabled</c:if>>
                 Confirmar compra
             </button>

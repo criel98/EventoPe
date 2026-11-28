@@ -1,6 +1,7 @@
 package pe.edu.utp.eventope.dao;
 
 import pe.edu.utp.eventope.dto.*;
+import pe.edu.utp.eventope.service.ReglasCupon;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
@@ -124,16 +125,42 @@ public final class CompraDAO {
             }
             subtotal = subtotal.add(z.precio.multiply(BigDecimal.valueOf(l.getCantidad())));
         }
+        if (carrito.isPagoRechazado()) {
+            throw new SQLException("El pago simulado fue rechazado. No se generaron entradas ni se modificó el cupo.");
+        }
 
-        String sql = "INSERT INTO transaccion_compra(codigo_unico, solicitud_hash, cliente_id, evento_id, cupon_id, subtotal, descuento, igv, total, estado) VALUES(?, ?, ?, ?, NULL, ?, 0, 0, ?, 'CONFIRMADA')";
+        Integer cuponId = null;
+        BigDecimal descuento = BigDecimal.ZERO;
+        String codigoCupon = ReglasCupon.normalizarCodigo(carrito.getCodigoCupon());
+        if (codigoCupon != null) {
+            try (PreparedStatement p = c.prepareStatement(
+                    "SELECT id, porcentaje_descuento FROM cupon_descuento "
+                    + "WHERE codigo_cupon = ? AND estado = 'ACTIVO' "
+                    + "AND fecha_expiracion > CURRENT_TIMESTAMP FOR UPDATE")) {
+                p.setString(1, codigoCupon);
+                try (ResultSet r = p.executeQuery()) {
+                    if (!r.next()) {
+                        throw new SQLException("El cupón no existe, está inactivo o ha vencido.");
+                    }
+                    cuponId = r.getInt("id");
+                    descuento = ReglasCupon.calcularDescuento(subtotal,
+                            r.getBigDecimal("porcentaje_descuento"));
+                }
+            }
+        }
+        BigDecimal total = subtotal.subtract(descuento).setScale(2);
+
+        String sql = "INSERT INTO transaccion_compra(codigo_unico, solicitud_hash, cliente_id, evento_id, cupon_id, subtotal, descuento, igv, total, estado) VALUES(?, ?, ?, ?, ?, ?, 0, 0, ?, 'CONFIRMADA')";
         int compraId;
         try (PreparedStatement p = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             p.setString(1, carrito.getClaveConfirmacion());
             p.setString(2, hash);
             p.setInt(3, clienteId);
             p.setInt(4, carrito.getEventoId());
-            p.setBigDecimal(5, subtotal);
+            if (cuponId == null) p.setNull(5, Types.INTEGER); else p.setInt(5, cuponId);
             p.setBigDecimal(6, subtotal);
+            p.setBigDecimal(7, descuento);
+            p.setBigDecimal(8, total);
             p.executeUpdate();
             try (ResultSet k = p.getGeneratedKeys()) {
                 if (!k.next()) throw new SQLException("No se pudo crear la compra.");
@@ -200,7 +227,7 @@ public final class CompraDAO {
             p.executeUpdate();
         }
 
-        return new CompraConfirmada(compraId, carrito.getClaveConfirmacion(), serie, nombreEvento, subtotal, carrito.getCantidadTotal());
+        return new CompraConfirmada(compraId, carrito.getClaveConfirmacion(), serie, nombreEvento, total, carrito.getCantidadTotal());
     }
 
     private static final class PrecioZona {

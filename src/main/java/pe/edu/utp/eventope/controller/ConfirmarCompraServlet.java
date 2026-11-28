@@ -51,6 +51,9 @@ public final class ConfirmarCompraServlet extends HttpServlet {
         }
 
         try {
+            String codigoCupon = req.getParameter("codigoCupon");
+            c.setCodigoCupon(codigoCupon);
+            c.setPagoRechazado("RECHAZADO".equalsIgnoreCase(req.getParameter("estadoPago")));
             CompraConfirmada r = servicio.confirmar(actor.getId(), c);
             req.getSession().removeAttribute("carritoCompra");
             req.getSession().setAttribute("ultimaCompraId", r.getId());

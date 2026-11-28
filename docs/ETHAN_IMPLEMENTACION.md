@@ -40,4 +40,32 @@ La prueba crea una compra de dos entradas y reduce el aforo en dos. No la ejecut
 
 ## Validación efectuada
 
-Se compiló con Maven en Java 26 / Jakarta EE 10, ejecutando el conjunto completo de pruebas unitarias y de integración del proyecto sin errores ni regresiones.
+Se compiló con Maven en Java 17/25 y Jakarta EE 10. El conjunto unitario ejecutado contiene 74 pruebas, con 33 pruebas de integración omitidas por no tener MySQL local configurado.
+
+## Cupones y descuentos
+- Ruta de administración: `/admin/ethan`, protegida para el rol `ADMIN`.
+- El cupón se valida en el servidor: formato, vigencia, estado activo y existencia real.
+- El porcentaje se consulta con bloqueo de fila y el descuento se calcula sobre el subtotal persistido.
+- El `cupon_id`, `subtotal`, `descuento` y `total` se guardan dentro de la misma transacción de compra.
+- Dato demo: `ETHAN10`, 10%.
+
+## Devoluciones
+- Ruta: `/compras/devolver?id=ID_TRANSACCION`.
+- Requiere compra propia, estado `CONFIRMADA`, política activa, plazo suficiente y entradas disponibles.
+- Se bloquean compra, evento, política y entradas; se restauran cupos por categoría y se anulan todas las entradas.
+- Repetir la devolución devuelve el reembolso existente sin duplicar movimientos ni restaurar cupos otra vez.
+- Una entrada `UTILIZADA` o `ANULADA` impide devolver el conjunto completo.
+
+## Pago simulado y pruebas
+- En revisión se puede seleccionar `RECHAZADO`. Antes de crear filas se aborta la transacción y no se modifican cupos ni entradas.
+- Se conservan la comprobación de doble clic, el límite acumulado de cuatro entradas y el bloqueo concurrente.
+- Casos unitarios incluidos: normalización/cálculo de cupón, cupón inválido, penalización y plazo de devolución.
+
+## Base de datos
+Ejecutar una vez sobre el esquema local:
+
+```sql
+SOURCE sql/07_ethan.sql;
+```
+
+No requiere `ALTER TABLE`. La transacción usa `cupon_descuento`, `politica_devolucion`, `transaccion_compra`, `entrada_digital`, `detalle_transaccion` y `categoria_asiento`.

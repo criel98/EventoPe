@@ -1,6 +1,7 @@
 package pe.edu.utp.eventope.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.*;
 
 public final class CarritoCompra implements Serializable {
@@ -10,6 +11,8 @@ public final class CarritoCompra implements Serializable {
     private final List<LineaCarrito> lineas;
     private List<NominacionAsistente> nominaciones = new ArrayList<>();
     private String claveConfirmacion;
+    private String codigoCupon;
+    private boolean pagoRechazado;
 
     public CarritoCompra(int eventoId, String eventoNombre, List<LineaCarrito> lineas) {
         if (eventoId <= 0 || lineas == null || lineas.isEmpty()) {
@@ -34,6 +37,10 @@ public final class CarritoCompra implements Serializable {
     public void setNominaciones(List<NominacionAsistente> n) { nominaciones = new ArrayList<>(n); }
     public String getClaveConfirmacion() { return claveConfirmacion; }
     public void asegurarClave() { if (claveConfirmacion == null) claveConfirmacion = UUID.randomUUID().toString(); }
+    public String getCodigoCupon() { return codigoCupon; }
+    public void setCodigoCupon(String codigoCupon) { this.codigoCupon = codigoCupon; }
+    public boolean isPagoRechazado() { return pagoRechazado; }
+    public void setPagoRechazado(boolean pagoRechazado) { this.pagoRechazado = pagoRechazado; }
 
     public void agregar(LineaCarrito linea) {
         for (int i = 0; i < lineas.size(); i++) {
