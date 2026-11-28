@@ -36,5 +36,11 @@ public class OrganizadorEvento implements Serializable {
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
 
+    public void validar() {
+        if (ruc == null || !ruc.matches("\\d{11}") || razonSocial == null || razonSocial.isBlank()
+                || emailContacto == null || !emailContacto.matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) {
+            throw new IllegalArgumentException("RUC, razón social y correo de contacto son obligatorios y deben ser válidos.");
+        }
+    }
 
 }

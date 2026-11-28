@@ -1,0 +1,4 @@
+<div class="mb-3">
+  <label class="form-label" for="<c:out value='${campoNombre}'/>"><c:out value="${campoEtiqueta}"/></label>
+  <input class="form-control" id="<c:out value='${campoNombre}'/>" name="<c:out value='${campoNombre}'/>" type="<c:out value='${campoTipo}'/>" value="<c:out value='${campoValor}'/>" <c:if test="${not empty campoMin}">min="<c:out value='${campoMin}'/>"</c:if> <c:if test="${not empty campoStep}">step="<c:out value='${campoStep}'/>"</c:if>>
+</div>

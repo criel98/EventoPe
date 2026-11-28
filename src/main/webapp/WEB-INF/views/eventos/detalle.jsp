@@ -11,6 +11,7 @@
 <body>
 <%@ include file="/WEB-INF/views/common/cabecera.jspf" %>
 <main>
+  <c:url var="apiEventoUrl" value="/api/eventos/${evento.id}"/>
   <a href="<c:url value='/eventos'/>">← Volver a la cartelera</a>
   <article class="tarjeta">
     <h1><c:out value="${evento.nombre}" /></h1>
@@ -29,10 +30,10 @@
       <input type="hidden" name="csrf" value="${csrf}">
       <c:forEach var="categoria" items="${evento.categorias}">
         <label>
-          <input type="radio" name="categoriaId" value="${categoria.id}" ${categoria.aforoDisponible > 0 ? '' : 'disabled'}>
+          <input id="zona-${categoria.id}" type="radio" name="categoriaId" value="${categoria.id}" ${categoria.aforoDisponible > 0 ? '' : 'disabled'}>
           <strong><c:out value="${categoria.nombreZona}" /></strong>
-          - S/. <c:out value="${categoria.precioBase}" />
-          <c:if test="${categoria.aforoDisponible <= 0}"> - Agotado</c:if>
+          - S/. <span id="precio-${categoria.id}"><c:out value="${categoria.precioBase}" /></span>
+          <span id="disponibilidad-${categoria.id}"><c:choose><c:when test="${categoria.aforoDisponible > 0}">Cupos disponibles: <c:out value="${categoria.aforoDisponible}" /></c:when><c:otherwise>Agotado</c:otherwise></c:choose></span>
         </label>
       </c:forEach>
       <label for="cantidad">Cantidad</label>
@@ -46,5 +47,28 @@
     </form>
   </section>
 </main>
+  <p id="actualizacion-zonas" role="status" aria-live="polite"></p>
+  <script>
+    fetch('<c:out value="${apiEventoUrl}"/>', {headers: {Accept: 'application/json'}})
+      .then(response => {
+        if (!response.ok) throw new Error('No fue posible consultar la disponibilidad actual.');
+        return response.json();
+      })
+      .then(evento => evento.zonas.forEach(zona => {
+        const radio = document.getElementById('zona-' + zona.id);
+        const disponibilidad = document.getElementById('disponibilidad-' + zona.id);
+        const precio = document.getElementById('precio-' + zona.id);
+        if (!radio || !disponibilidad || !precio) return;
+        radio.disabled = zona.disponibilidad <= 0;
+        disponibilidad.textContent = zona.disponibilidad > 0
+          ? `Cupos disponibles: ${zona.disponibilidad}`
+          : 'Agotado';
+        precio.textContent = zona.precio;
+      }))
+      .catch(() => {
+        const estado = document.getElementById('actualizacion-zonas');
+        if (estado) estado.textContent = 'No se pudo actualizar la disponibilidad; se muestran los últimos datos cargados.';
+      });
+  </script>
 </body>
 </html>

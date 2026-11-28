@@ -36,5 +36,10 @@ public class Artista implements Serializable {
     public String getRedSocial() { return redSocial; }
     public void setRedSocial(String redSocial) { this.redSocial = redSocial; }
 
+    public void validar() {
+        if (nombreArtistico == null || nombreArtistico.isBlank()) {
+            throw new IllegalArgumentException("El nombre artístico es obligatorio.");
+        }
+    }
 
 }

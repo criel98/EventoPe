@@ -36,5 +36,11 @@ public class LocalConcierto implements Serializable {
     public String getCiudad() { return ciudad; }
     public void setCiudad(String ciudad) { this.ciudad = ciudad; }
 
+    public void validar() {
+        if (nombreLocal == null || nombreLocal.isBlank() || direccion == null || direccion.isBlank()
+                || ciudad == null || ciudad.isBlank() || capacidadMax <= 0) {
+            throw new IllegalArgumentException("Nombre, dirección, ciudad y capacidad positiva son obligatorios.");
+        }
+    }
 
 }

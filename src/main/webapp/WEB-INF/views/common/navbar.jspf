@@ -1,0 +1,11 @@
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="<c:url value='/admin/eventos'/>">EventoPe · Administración</a>
+    <div class="navbar-nav">
+      <a class="nav-link" href="<c:url value='/admin/eventos'/>">Eventos</a>
+      <a class="nav-link" href="<c:url value='/admin/eventos/organizadores'/>">Organizadores</a>
+      <a class="nav-link" href="<c:url value='/admin/eventos/artistas'/>">Artistas</a>
+      <a class="nav-link" href="<c:url value='/admin/eventos/locales'/>">Locales</a>
+    </div>
+  </div>
+</nav>

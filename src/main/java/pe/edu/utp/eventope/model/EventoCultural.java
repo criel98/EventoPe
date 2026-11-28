@@ -62,5 +62,18 @@ public class EventoCultural implements Serializable {
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 
+    public void publicar() {
+        if (aforo <= 0 || localId <= 0 || organizadorId <= 0) {
+            throw new IllegalStateException("El evento requiere aforo, local y organizador válidos.");
+        }
+        estado = "PUBLICADO";
+    }
+
+    public void desactivar() {
+        if (!"PUBLICADO".equals(estado)) {
+            throw new IllegalStateException("Solo se pueden desactivar eventos publicados.");
+        }
+        estado = "INACTIVO";
+    }
 
 }

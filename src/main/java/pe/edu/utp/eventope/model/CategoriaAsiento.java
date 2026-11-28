@@ -43,4 +43,23 @@ public class CategoriaAsiento implements Serializable {
     public void setAforoDisponible(int aforoDisponible) { this.aforoDisponible = aforoDisponible; }
 
     public boolean hayCupo(int cantidad) { return cantidad > 0 && cantidad <= aforoDisponible; }
+
+    public void validar() {
+        if (eventoId <= 0 || nombreZona == null || nombreZona.isBlank()
+                || precioBase == null || precioBase.signum() < 0 || aforoTotal <= 0
+                || aforoDisponible < 0 || aforoDisponible > aforoTotal) {
+            throw new IllegalArgumentException("La zona requiere nombre, precio no negativo y aforo válido.");
+        }
+    }
+
+    public void validarReduccionCapacidad(int nuevoAforo) {
+        validarReduccionCapacidad(nuevoAforo, 0);
+    }
+
+    public void validarReduccionCapacidad(int nuevoAforo, int entradasComprometidas) {
+        int comprometidas = Math.max(aforoTotal - aforoDisponible, entradasComprometidas);
+        if (nuevoAforo <= 0 || entradasComprometidas < 0 || nuevoAforo < comprometidas) {
+            throw new IllegalArgumentException("La capacidad no puede ser menor que las entradas ya comprometidas.");
+        }
+    }
 }
