@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      lang="es">
+<h:head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Soporte y Reclamos (RF-18) | EventoPe</title>
+  <link rel="stylesheet" href="#{request.contextPath}/assets/css/app.css" />
+</h:head>
+<h:body>
+  <main>
+    <section class="tarjeta">
+      <h1>Centro de Soporte y Reclamos (RF-18)</h1>
+
+      <h:messages globalOnly="true" styleClass="mensajes"
+                  infoClass="exito" errorClass="error" warnClass="aviso" />
+
+      <h:panelGroup rendered="#{not empty reclamosSoporteBean.errorAcceso}">
+        <p class="error" role="alert">#{reclamosSoporteBean.errorAcceso}</p>
+        <p>
+          <a href="#{request.contextPath}/personal/login">Ir a login de personal</a>
+          |
+          <a href="#{request.contextPath}/">Volver al inicio</a>
+        </p>
+      </h:panelGroup>
+
+      <h:panelGroup rendered="#{reclamosSoporteBean.esCliente}">
+        <h2>Registrar nuevo reclamo</h2>
+        <h:form id="formNuevoReclamo" styleClass="formulario">
+          <input type="hidden" name="csrf" value="#{sessionScope.csrf}" />
+
+          <h:outputLabel for="incidenciaId" value="ID de incidencia (opcional)" />
+          <h:inputText id="incidenciaId" value="#{reclamosSoporteBean.incidenciaId}" />
+
+          <h:outputLabel for="asunto" value="Asunto" />
+          <h:inputText id="asunto" value="#{reclamosSoporteBean.asunto}"
+                       required="true" requiredMessage="Ingresa el asunto del reclamo." />
+
+          <h:outputLabel for="descripcion" value="Descripción" />
+          <h:inputTextarea id="descripcion" value="#{reclamosSoporteBean.descripcion}"
+                           rows="4" required="true"
+                           requiredMessage="Describe el motivo de tu reclamo." />
+
+          <h:commandButton value="Enviar reclamo" action="#{reclamosSoporteBean.crearReclamo}" />
+        </h:form>
+      </h:panelGroup>
+
+      <h:panelGroup rendered="#{reclamosSoporteBean.esStaffSoporte and reclamosSoporteBean.reclamoSeleccionadoId != null}">
+        <h2>Responder reclamo ##{reclamosSoporteBean.reclamoSeleccionadoId}</h2>
+        <h:form id="formResponderReclamo" styleClass="formulario">
+          <input type="hidden" name="csrf" value="#{sessionScope.csrf}" />
+
+          <h:outputLabel for="nuevoEstado" value="Estado del reclamo" />
+          <h:selectOneMenu id="nuevoEstado" value="#{reclamosSoporteBean.nuevoEstado}">
+            <f:selectItem itemValue="PENDIENTE" itemLabel="PENDIENTE" />
+            <f:selectItem itemValue="EN_REVISION" itemLabel="EN_REVISION" />
+            <f:selectItem itemValue="RESUELTO" itemLabel="RESUELTO" />
+            <f:selectItem itemValue="CERRADO" itemLabel="CERRADO" />
+          </h:selectOneMenu>
+
+          <h:outputLabel for="respuestaTexto" value="Respuesta de soporte" />
+          <h:inputTextarea id="respuestaTexto" value="#{reclamosSoporteBean.respuestaTexto}"
+                           rows="4" required="true"
+                           requiredMessage="Escribe una respuesta para el reclamo." />
+
+          <h:commandButton value="Guardar respuesta" action="#{reclamosSoporteBean.guardarRespuesta}" />
+        </h:form>
+      </h:panelGroup>
+    </section>
+
+    <h:panelGroup rendered="#{reclamosSoporteBean.esCliente or reclamosSoporteBean.esStaffSoporte}">
+      <section class="tarjeta">
+        <h2>Listado de reclamos</h2>
+        <h:form id="formTablaReclamos">
+          <input type="hidden" name="csrf" value="#{sessionScope.csrf}" />
+
+          <h:dataTable value="#{reclamosSoporteBean.reclamos}" var="r" styleClass="tabla">
+            <h:column>
+              <f:facet name="header">ID</f:facet>
+              #{r.id}
+            </h:column>
+            <h:column rendered="#{reclamosSoporteBean.esStaffSoporte}">
+              <f:facet name="header">Cliente ID</f:facet>
+              #{r.clienteId}
+            </h:column>
+            <h:column>
+              <f:facet name="header">Incidencia</f:facet>
+              #{empty r.incidenciaId ? '-' : r.incidenciaId}
+            </h:column>
+            <h:column>
+              <f:facet name="header">Asunto</f:facet>
+              #{r.asunto}
+            </h:column>
+            <h:column>
+              <f:facet name="header">Descripción</f:facet>
+              #{r.descripcion}
+            </h:column>
+            <h:column>
+              <f:facet name="header">Estado</f:facet>
+              #{r.estadoReclamo}
+            </h:column>
+            <h:column>
+              <f:facet name="header">Respuesta</f:facet>
+              #{empty r.respuesta ? 'Sin respuesta aún' : r.respuesta}
+            </h:column>
+            <h:column rendered="#{reclamosSoporteBean.esStaffSoporte}">
+              <f:facet name="header">Acción</f:facet>
+              <h:commandButton value="Responder"
+                               action="#{reclamosSoporteBean.prepararRespuesta(r)}" />
+            </h:column>
+          </h:dataTable>
+        </h:form>
+      </section>
+    </h:panelGroup>
+  </main>
+</h:body>
+</html>
