@@ -1,4 +1,4 @@
--- Migracion aditiva para el dump legacy eventope_db.sql.
+-- Migracion aditiva final para el dump legacy eventope_db.sql.
 -- No ejecutar sql/05_daniel.sql antes de este archivo: el dump no contiene varias
 -- columnas usadas por esos indices. MySQL 8.0.16+.
 --
