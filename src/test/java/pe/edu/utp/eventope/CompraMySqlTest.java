@@ -10,7 +10,11 @@ import pe.edu.utp.eventope.service.ServicioCompra;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,16 +37,29 @@ class CompraMySqlTest {
         int categoria = Integer.parseInt(categoriaP);
         var conexion = new ConexionBD(Configuracion.cargar());
         int aforoAntes;
+        BigDecimal precio;
         try (Connection c = conexion.abrir();
-             PreparedStatement p = c.prepareStatement("SELECT aforo_disponible FROM categoria_asiento WHERE id = ? AND evento_id = ? AND aforo_disponible >= 2")) {
+             PreparedStatement p = c.prepareStatement("SELECT aforo_disponible, precio_base FROM categoria_asiento WHERE id = ? AND evento_id = ? AND aforo_disponible >= 2")) {
             p.setInt(1, categoria);
             p.setInt(2, evento);
             try (ResultSet r = p.executeQuery()) {
                 Assumptions.assumeTrue(r.next(), "La categoría debe pertenecer al evento y tener dos cupos disponibles");
                 aforoAntes = r.getInt(1);
+                precio = r.getBigDecimal(2);
             }
         }
+        String codigoCupon = ("T" + UUID.randomUUID().toString().replace("-", "")).substring(0, 20);
+        try (Connection c = conexion.abrir();
+             PreparedStatement p = c.prepareStatement(
+                     "INSERT INTO cupon_descuento(codigo_cupon,porcentaje_descuento,fecha_expiracion,estado) "
+                             + "VALUES(?,?,?,'ACTIVO')")) {
+            p.setString(1, codigoCupon);
+            p.setBigDecimal(2, new BigDecimal("10.00"));
+            p.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now().plusDays(1)));
+            p.executeUpdate();
+        }
         CarritoCompra carrito = new CarritoCompra(evento, "Prueba de integración", List.of(new LineaCarrito(categoria, "Zona de prueba", 2, "0.00")));
+        carrito.setCodigoCupon(codigoCupon);
         carrito.setNominaciones(List.of(
                 new NominacionAsistente("12345670", "Prueba Uno", "Integración"),
                 new NominacionAsistente("12345671", "Prueba Dos", "Integración")));
@@ -51,15 +68,25 @@ class CompraMySqlTest {
         CompraConfirmada reintento = servicio.confirmar(cliente, carrito);
         assertEquals(primera.getId(), reintento.getId(), "El reintento debe recuperar la misma compra");
         try (Connection c = conexion.abrir();
-             PreparedStatement p = c.prepareStatement("SELECT (SELECT COUNT(*) FROM detalle_transaccion WHERE transaccion_id = ?), (SELECT COUNT(*) FROM boleto_nominado b JOIN detalle_transaccion d ON d.entrada_id = b.entrada_id WHERE d.transaccion_id = ?), (SELECT aforo_disponible FROM categoria_asiento WHERE id = ?)")) {
+             PreparedStatement p = c.prepareStatement("SELECT (SELECT COUNT(*) FROM detalle_transaccion WHERE transaccion_id = ?), (SELECT COUNT(*) FROM boleto_nominado b JOIN detalle_transaccion d ON d.entrada_id = b.entrada_id WHERE d.transaccion_id = ?), (SELECT aforo_disponible FROM categoria_asiento WHERE id = ?), (SELECT subtotal FROM transaccion_compra WHERE id = ?), (SELECT descuento FROM transaccion_compra WHERE id = ?), (SELECT total FROM transaccion_compra WHERE id = ?), (SELECT cupon_id FROM transaccion_compra WHERE id = ?)")) {
             p.setInt(1, primera.getId());
             p.setInt(2, primera.getId());
             p.setInt(3, categoria);
+            p.setInt(4, primera.getId());
+            p.setInt(5, primera.getId());
+            p.setInt(6, primera.getId());
+            p.setInt(7, primera.getId());
             try (ResultSet r = p.executeQuery()) {
                 assertTrue(r.next());
                 assertEquals(2, r.getInt(1));
                 assertEquals(2, r.getInt(2));
                 assertEquals(aforoAntes - 2, r.getInt(3));
+                BigDecimal subtotalEsperado = precio.multiply(new BigDecimal("2.00")).setScale(2);
+                BigDecimal descuentoEsperado = subtotalEsperado.multiply(new BigDecimal("0.10")).setScale(2, java.math.RoundingMode.HALF_UP);
+                assertEquals(0, subtotalEsperado.compareTo(r.getBigDecimal(4)));
+                assertEquals(0, descuentoEsperado.compareTo(r.getBigDecimal(5)));
+                assertEquals(0, subtotalEsperado.subtract(descuentoEsperado).compareTo(r.getBigDecimal(6)));
+                assertTrue(r.getInt(7) > 0);
             }
         }
     }

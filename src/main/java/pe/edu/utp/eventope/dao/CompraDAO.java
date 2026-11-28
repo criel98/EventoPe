@@ -150,7 +150,7 @@ public final class CompraDAO {
         }
         BigDecimal total = subtotal.subtract(descuento).setScale(2);
 
-        String sql = "INSERT INTO transaccion_compra(codigo_unico, solicitud_hash, cliente_id, evento_id, cupon_id, subtotal, descuento, igv, total, estado) VALUES(?, ?, ?, ?, ?, ?, 0, 0, ?, 'CONFIRMADA')";
+        String sql = "INSERT INTO transaccion_compra(codigo_unico, solicitud_hash, cliente_id, evento_id, cupon_id, subtotal, descuento, igv, total, estado) VALUES(?, ?, ?, ?, ?, ?, ?, 0, ?, 'CONFIRMADA')";
         int compraId;
         try (PreparedStatement p = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             p.setString(1, carrito.getClaveConfirmacion());
