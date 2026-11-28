@@ -8,6 +8,6 @@ SELECT 'ETHAN10',10.00,UTC_TIMESTAMP()+INTERVAL 365 DAY,'ACTIVO'
 WHERE NOT EXISTS (SELECT 1 FROM cupon_descuento WHERE codigo_cupon='ETHAN10');
 
 INSERT INTO politica_devolucion(evento_id,dias_minimos_previos,penalizacion_porcentaje,estado_activo)
-VALUES(10,7,10.00,TRUE)
+VALUES(10,7,10.00,TRUE),(12,7,10.00,TRUE)
 ON DUPLICATE KEY UPDATE dias_minimos_previos=VALUES(dias_minimos_previos),
 penalizacion_porcentaje=VALUES(penalizacion_porcentaje),estado_activo=TRUE;
